@@ -1,0 +1,29 @@
+{% extends 'blog/base_blog.html' %}
+
+
+{% block title %}
+{{ post.title }} - {{ block.super }}     
+{% endblock title %}
+
+
+{% block content %}
+
+<div class="card" style="width: 70rem;">
+    <!-- <img src="..." class="card-img-top" alt="..."> -->
+    <div class="card-body">
+      <h5 class="card-title">{{ post.title }}</h5>
+      <p class="card-text">{{ post.body }}</p>
+      
+        <a href="###" class="btn btn-outline-primary">Редактировать</a>
+        <a href="###" class="btn btn-outline-danger">Удалить</a>
+
+    </div>
+    <div class="card-footer text-muted">
+    
+
+      <a href="###">#tag</a>        
+ 
+          
+    </div>
+  </div>
+{% endblock content %}
