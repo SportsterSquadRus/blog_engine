@@ -18,7 +18,9 @@
   </div>  
   <div class="card-footer text-muted">    
 
-  <a href="###">#tag</a>
+    {% for tag in post.tags.all %}
+    <a href="{% url 'tag_detail_url' slug=tag.slug %}">#{{ tag }}</a>      
+    {% endfor %} 
     
     
   </div>
