@@ -3,3 +3,4 @@ pylint
 pylint-django
 django
 django-allauth
+django-taggit
