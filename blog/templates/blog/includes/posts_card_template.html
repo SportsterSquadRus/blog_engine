@@ -1,3 +1,4 @@
+
 <div class="card mb-5">
   <div class="card-header">
       <a href="{% url 'author_posts_list_url' post.author.username %}">{{ post.author }}</a> {{ post.date_pub }}       
@@ -9,7 +10,7 @@
     
   <div class="card-body">
     <h5 class="card-title">{{ post.title }}</h5>
-    <p class="card-text">{{ post.body|truncatewords:15 }}</p>
+    <p class="card-text">{{ post.body|truncatewords:post.truncate }}</p>
     <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary">Читать</a>      
     {% if request.user == post.author %}        
     <a href="{{ post.get_update_url }}" class="btn btn-outline-dark">Редактировать</a>
@@ -17,8 +18,8 @@
   </div>  
   <div class="card-footer text-muted">    
 
-  <a href="###">#тэг</a>
+  <a href="###">#tag</a>
     
-   
+    
   </div>
-</div> 
+</div>  

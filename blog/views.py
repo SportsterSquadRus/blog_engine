@@ -7,10 +7,13 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-class PostListView(ListView):
+class PostsListView(ListView):
     model = Post
+    queryset = Post.objects.filter(draft_status=False)
     template_name = "blog/posts_list.html"
     context_object_name = 'posts'
+    ordering = ['-date_pub']
+    paginate_by = 4
 
 
 class PostDetailView(DetailView):
@@ -30,6 +33,10 @@ class PostCreateView(LoginRequiredMixin, View):
         if bound_form.is_valid():
             new_post = bound_form.save()
             new_post.author = request.user
+            if '<cut>' in new_post.body:
+                new_post.truncate = len(new_post.body[:new_post.body.find('<cut>')].split())
+            else:
+                new_post.truncate = 50
             if new_post.draft_status == False:
                 new_post.date_pub = timezone.now()
             new_post.save()
@@ -65,7 +72,11 @@ class PostUpdateView(LoginRequiredMixin, View):
 
         if bound_form.is_valid():
             new_post = bound_form.save()
-            if new_post.draft_status == False:
+            if '<cut>' in new_post.body:
+                new_post.truncate = len(new_post.body[:new_post.body.find('<cut>')].split())
+            else:
+                new_post.truncate = 50
+            if post.draft_status == True and new_post.draft_status == False:
                 new_post.date_pub = timezone.now()
             new_post = bound_form.save()
 
