@@ -110,3 +110,8 @@ class TagDetailView(View):
         return render(request, 'blog/tag_detail.html', context={'tag': tag, 'posts': Post.objects.filter(tags=tag, draft_status=False).order_by('-date_pub')})
 
 
+def LikeView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    if request.user not in post.likes.all():
+        post.likes.add(request.user)
+    return redirect(reverse('post_detail_url', args=[str(pk)]))

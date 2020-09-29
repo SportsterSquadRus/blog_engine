@@ -14,6 +14,10 @@ class Post(models.Model):
     draft_status = models.BooleanField(verbose_name='Черновик', default=False)
     truncate = models.IntegerField(default=0)
     tags = TaggableManager(verbose_name='Теги')
+    likes = models.ManyToManyField(auth.models.User, related_name='blog_posts')
+
+    def total_likes(self):
+        return self.likes.count()
 
     def get_absolute_url(self):
         return reverse('post_detail_url', kwargs={'pk': self.pk})

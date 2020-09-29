@@ -15,10 +15,22 @@
     <div class="card-body">
       <h5 class="card-title">{{ post.title }}</h5>
       <p class="card-text">{{ post.body|cut:'<cut>' }}</p>
-        {% if request.user == post.author %}        
-        <a href="{{ post.get_update_url }}" class="btn btn-outline-primary">Редактировать</a>
-        <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
-        {% endif %}
+
+
+        <form action="{% url 'like_post' post.pk %}" method="POST">
+          {% csrf_token %}
+          
+          {% if request.user not in post.likes.all %}
+          <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-outline-info">{{ post.total_likes }}</button>
+          {% else %}
+          <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-info">{{ post.total_likes }}</button>            
+          {% endif %}            
+          
+          {% if request.user == post.author %}        
+          <a href="{{ post.get_update_url }}" class="btn btn-outline-primary">Редактировать</a>
+          <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
+          {% endif %}
+        </form>
     </div>
     <div class="card-footer text-muted">
     
