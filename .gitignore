@@ -1,0 +1,5 @@
+blog_engine/passwords.py
+blog_engine/__pycache__
+blog_env
+blog/__pycache__
+blog/migrations/__pycache__
