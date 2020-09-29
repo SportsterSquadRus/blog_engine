@@ -44,9 +44,12 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
-    'blog.apps.BlogConfig'
+    'blog.apps.BlogConfig',
+    'taggit'
 
 ]
+
+TAGGIT_CASE_INSENSITIVE = True
 
 SITE_ID = 1
 
