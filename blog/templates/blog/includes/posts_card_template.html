@@ -1,0 +1,24 @@
+<div class="card mb-5">
+    <div class="card-header">
+        <a href="###">автор</a> {{ post.date_pub }}       
+    </div>
+    
+
+    <img src="###" class="card-img-top" alt="Обложка">  
+
+      
+    <div class="card-body">
+      <h5 class="card-title">{{ post.title }}</h5>
+      <p class="card-text">{{ post.body|truncatewords:15 }}</p>
+      <a href="###" class="btn btn-outline-primary">Читать</a>      
+      {% if request.user == post.author %}        
+      <a href="###" class="btn btn-outline-dark">Редактировать</a>
+      {% endif %}
+    </div>  
+    <div class="card-footer text-muted">    
+
+    <a href="###">#ТЭГИ</a>
+      
+      
+    </div>
+  </div>  
