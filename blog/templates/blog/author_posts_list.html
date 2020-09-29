@@ -1,0 +1,17 @@
+{% extends 'blog/base_blog.html' %}
+
+
+{% block title %}
+{{ block.super }}    
+{% endblock title %}
+
+
+
+{% block content %}
+{% for post in posts %}
+{% include 'blog/includes/posts_card_template.html' %} 
+{% endfor %}
+    
+
+
+{% endblock content %}

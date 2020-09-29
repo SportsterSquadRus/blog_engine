@@ -9,20 +9,22 @@
 {% block content %}
 
 <div class="card" style="width: 70rem;">
-    <!-- <img src="..." class="card-img-top" alt="..."> -->
+  {% if post.cover_url %}
+  <img src="{{ post.cover_url }}" class="card-img-top" alt="Обложка">  
+  {% endif %}
     <div class="card-body">
       <h5 class="card-title">{{ post.title }}</h5>
-      <p class="card-text">{{ post.body }}</p>
-      
-        <a href="###" class="btn btn-outline-primary">Редактировать</a>
-        <a href="###" class="btn btn-outline-danger">Удалить</a>
-
+      <p class="card-text">{{ post.body|cut:'<cut>' }}</p>
+        {% if request.user == post.author %}        
+        <a href="{{ post.get_update_url }}" class="btn btn-outline-primary">Редактировать</a>
+        <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
+        {% endif %}
     </div>
     <div class="card-footer text-muted">
     
-
-      <a href="###">#tag</a>        
- 
+      <!-- {% for tag in post.tags.all %}
+      <a href="{% url 'tag_detail_url' slug=tag.slug %}">#{{ tag }}</a>        
+      {% endfor %}    -->
           
     </div>
   </div>
