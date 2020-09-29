@@ -49,3 +49,25 @@ class PostDeleteView(LoginRequiredMixin, View):
         post = Post.objects.get(pk=pk)
         post.delete()
         return redirect(reverse('posts_list_url'))
+
+
+class PostUpdateView(LoginRequiredMixin, View):
+
+    def get(self, request, pk):
+        post = get_object_or_404(Post, pk=pk, author=request.user)
+        bound_form = PostForm(instance=post)
+        return render(request, 'blog/post_update.html', context={'form': bound_form, 'post': post})
+
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        bound_form = PostForm(request.POST, instance=post)
+
+        if bound_form.is_valid():
+            new_post = bound_form.save()
+            if new_post.draft_status == False:
+                new_post.date_pub = timezone.now()
+            new_post = bound_form.save()
+
+            return redirect(new_post)
+        else:
+            return render(request, 'blog_update.html', context={'form': bound_form, 'post': post})
