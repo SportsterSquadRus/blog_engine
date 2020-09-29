@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post
 from .forms import PostForm
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class PostListView(ListView):
@@ -71,3 +72,15 @@ class PostUpdateView(LoginRequiredMixin, View):
             return redirect(new_post)
         else:
             return render(request, 'blog_update.html', context={'form': bound_form, 'post': post})
+
+
+class DraftsListView(View):
+    def get(self, request):
+        posts = Post.objects.filter(author=request.user, draft_status=True)
+        return render(request, 'blog/posts_list.html', {'posts': posts})
+
+
+class AuthorPostsView(View):
+    def get(self, request, username):
+        user = User.objects.get(username=username)
+        return render(request, 'blog/author_posts_list.html', context={'posts': Post.objects.filter(author=user, draft_status=False).order_by('-date_pub')})
