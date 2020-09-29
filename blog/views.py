@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post
 from .forms import PostForm
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth import models
 from taggit.models import Tag
 
 
@@ -94,7 +94,7 @@ class DraftsListView(View):
 
 class AuthorPostsView(View):
     def get(self, request, username):
-        user = User.objects.get(username=username)
+        user = models.User.objects.get(username=username)
         return render(request, 'blog/author_posts_list.html', context={'posts': Post.objects.filter(author=user, draft_status=False).order_by('-date_pub')})
 
 class TagListView(ListView):
