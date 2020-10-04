@@ -14,7 +14,7 @@
   {% endif %}
     <div class="card-body">
       <h5 class="card-title">{{ post.title }}</h5>
-      <p class="card-text">{{ post.body|cut:'<cut>' }}</p>
+      <p class="card-text">{{ post.body|safe|cut:'<cut>' }}</p>
 
 
         <form action="{% url 'like_post' post.pk %}" method="POST">
