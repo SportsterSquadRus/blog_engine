@@ -6,6 +6,7 @@ from .forms import PostForm
 from django.utils import timezone
 from django.contrib.auth import models
 from taggit.models import Tag
+from django.db.models import Q
 
 
 class PostsListView(ListView):
@@ -20,6 +21,23 @@ class PostsListView(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = "blog/post_detail.html"
+
+
+class SearchView(ListView):
+    paginate_by = 4
+    template_name = "blog/posts_list.html"
+    ordering = ['-date_pub']
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        return Post.objects.filter(Q(title__icontains=self.request.GET.get('search')) | Q(body__icontains=self.request.GET.get('search')))
+
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search'] = self.request.GET.get('search')
+        return context
+    
 
 
 class PostCreateView(LoginRequiredMixin, View):
