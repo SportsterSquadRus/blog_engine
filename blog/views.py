@@ -17,10 +17,15 @@ class PostsListView(ListView):
     paginate_by = 4
 
 
-class AuthorPostsView(View):
-    def get(self, request, username):
-        user = models.User.objects.get(username=username)
-        return render(request, 'blog/author_posts_list.html', context={'posts': Post.objects.filter(author=user, draft_status=False)})
+class AuthorPostsView(ListView):
+    model = Post
+    paginate_by = 4
+    context_object_name = 'posts'
+    template_name = 'blog/author_posts_list.html'
+
+    def get_queryset(self):
+        user = user = models.User.objects.get(username=self.kwargs['username'])
+        return Post.objects.filter(author=user, draft_status=False)
 
 
 class PostDetailView(DetailView):
