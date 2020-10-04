@@ -49,7 +49,7 @@
           </li>
       </ul>
       <form action="{% url 'search_posts_url' %}" method="GET" class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search" aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" name="q" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </div>
@@ -71,7 +71,7 @@
             </li>
         
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ query }}">{{ page_obj.previous_page_number }}</a>
             </li>
             {% endif %}
             
@@ -81,10 +81,10 @@
             
             {% if page_obj.has_next %}
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ query }}">{{ page_obj.next_page_number }}</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Конец</a>
+              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&q={{ query }}">Конец</a>
             </li>
             {% endif %}  
           </ul>

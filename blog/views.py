@@ -30,12 +30,12 @@ class SearchView(ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        return Post.objects.filter(Q(title__icontains=self.request.GET.get('search')) | Q(body__icontains=self.request.GET.get('search')))
+        return Post.objects.filter(Q(title__icontains=self.request.GET.get('q')) | Q(body__icontains=self.request.GET.get('q')))
 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['search'] = self.request.GET.get('search')
+        context['query'] = self.request.GET.get('q')
         return context
     
 
