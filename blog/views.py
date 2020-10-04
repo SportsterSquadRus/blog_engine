@@ -17,6 +17,16 @@ class PostsListView(ListView):
     paginate_by = 4
 
 
+class DraftsListView(ListView):
+    model = Post
+    template_name = "blog/posts_list.html"
+    context_object_name = 'posts'
+    paginate_by = 4
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user, draft_status=True)
+
+
 class AuthorPostsView(ListView):
     model = Post
     paginate_by = 4
@@ -41,12 +51,10 @@ class SearchView(ListView):
     def get_queryset(self):
         return Post.objects.filter(Q(title__icontains=self.request.GET.get('q')) | Q(body__icontains=self.request.GET.get('q')))
 
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q')
         return context
-    
 
 
 class PostCreateView(LoginRequiredMixin, View):
@@ -62,7 +70,8 @@ class PostCreateView(LoginRequiredMixin, View):
             new_post = bound_form.save()
             new_post.author = request.user
             if '<cut>' in new_post.body:
-                new_post.truncate = len(new_post.body[:new_post.body.find('<cut>')].split())
+                new_post.truncate = len(
+                    new_post.body[:new_post.body.find('<cut>')].split())
             else:
                 new_post.truncate = 50
             if new_post.draft_status == False:
@@ -101,7 +110,8 @@ class PostUpdateView(LoginRequiredMixin, View):
         if bound_form.is_valid():
             new_post = bound_form.save()
             if '<cut>' in new_post.body:
-                new_post.truncate = len(new_post.body[:new_post.body.find('<cut>')].split())
+                new_post.truncate = len(
+                    new_post.body[:new_post.body.find('<cut>')].split())
             else:
                 new_post.truncate = 50
             if post.draft_status == True and new_post.draft_status == False:
@@ -113,19 +123,13 @@ class PostUpdateView(LoginRequiredMixin, View):
             return render(request, 'blog_update.html', context={'form': bound_form, 'post': post})
 
 
-class DraftsListView(View):
-    def get(self, request):
-        posts = Post.objects.filter(author=request.user, draft_status=True)
-        return render(request, 'blog/posts_list.html', {'posts': posts})
-
-
-
 class TagListView(ListView):
     model = Tag
     template_name = "blog/tags_list.html"
     context_object_name = 'tags'
     ordering = ['name']
     paginate_by = 4
+
 
 class TagDetailView(View):
     def get(self, request, slug):
