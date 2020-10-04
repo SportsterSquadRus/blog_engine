@@ -131,10 +131,20 @@ class TagListView(ListView):
     paginate_by = 4
 
 
-class TagDetailView(View):    
-    def get(self, request, slug):
-        tag = get_object_or_404(Tag, slug__iexact=slug)
-        return render(request, 'blog/tag_detail.html', context={'tag': tag, 'posts': Post.objects.filter(tags=tag, draft_status=False)})
+class TagDetailView(ListView):
+    model = Post
+    template_name = "blog/tag_detail.html"
+    context_object_name = 'posts'
+    paginate_by = 4
+
+    def get_queryset(self, **kwargs):
+        tag = get_object_or_404(Tag, slug__iexact=self.kwargs['slug'])
+        return Post.objects.filter(tags=tag, draft_status=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = Tag.objects.get(slug__iexact=self.kwargs['slug'])
+        return context
 
 
 def LikeView(request, pk):
