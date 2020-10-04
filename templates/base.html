@@ -67,7 +67,7 @@
           <ul class="pagination">
             {% if page_obj.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?page=1">Начало</a>
+              <a class="page-link" href="?page={{ page_obj.first }}&q={{ query }}">Начало</a>
             </li>
         
             <li class="page-item">

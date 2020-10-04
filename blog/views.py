@@ -14,8 +14,13 @@ class PostsListView(ListView):
     queryset = Post.objects.filter(draft_status=False)
     template_name = "blog/posts_list.html"
     context_object_name = 'posts'
-    ordering = ['-date_pub']
     paginate_by = 4
+
+
+class AuthorPostsView(View):
+    def get(self, request, username):
+        user = models.User.objects.get(username=username)
+        return render(request, 'blog/author_posts_list.html', context={'posts': Post.objects.filter(author=user, draft_status=False)})
 
 
 class PostDetailView(DetailView):
@@ -26,7 +31,6 @@ class PostDetailView(DetailView):
 class SearchView(ListView):
     paginate_by = 4
     template_name = "blog/posts_list.html"
-    ordering = ['-date_pub']
     context_object_name = 'posts'
 
     def get_queryset(self):
@@ -110,10 +114,6 @@ class DraftsListView(View):
         return render(request, 'blog/posts_list.html', {'posts': posts})
 
 
-class AuthorPostsView(View):
-    def get(self, request, username):
-        user = models.User.objects.get(username=username)
-        return render(request, 'blog/author_posts_list.html', context={'posts': Post.objects.filter(author=user, draft_status=False).order_by('-date_pub')})
 
 class TagListView(ListView):
     model = Tag
