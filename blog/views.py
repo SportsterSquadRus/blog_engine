@@ -6,6 +6,7 @@ from .forms import PostForm
 from django.utils import timezone
 from django.contrib.auth import models
 from taggit.models import Tag
+from django.db.models import Q
 
 
 class PostsListView(ListView):
@@ -13,13 +14,39 @@ class PostsListView(ListView):
     queryset = Post.objects.filter(draft_status=False)
     template_name = "blog/posts_list.html"
     context_object_name = 'posts'
-    ordering = ['-date_pub']
     paginate_by = 4
+
+
+class AuthorPostsView(ListView):
+    model = Post
+    paginate_by = 4
+    context_object_name = 'posts'
+    template_name = 'blog/author_posts_list.html'
+
+    def get_queryset(self):
+        user = user = models.User.objects.get(username=self.kwargs['username'])
+        return Post.objects.filter(author=user, draft_status=False)
 
 
 class PostDetailView(DetailView):
     model = Post
     template_name = "blog/post_detail.html"
+
+
+class SearchView(ListView):
+    paginate_by = 4
+    template_name = "blog/posts_list.html"
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        return Post.objects.filter(Q(title__icontains=self.request.GET.get('q')) | Q(body__icontains=self.request.GET.get('q')))
+
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q')
+        return context
+    
 
 
 class PostCreateView(LoginRequiredMixin, View):
@@ -92,10 +119,6 @@ class DraftsListView(View):
         return render(request, 'blog/posts_list.html', {'posts': posts})
 
 
-class AuthorPostsView(View):
-    def get(self, request, username):
-        user = models.User.objects.get(username=username)
-        return render(request, 'blog/author_posts_list.html', context={'posts': Post.objects.filter(author=user, draft_status=False).order_by('-date_pub')})
 
 class TagListView(ListView):
     model = Tag

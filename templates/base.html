@@ -48,8 +48,8 @@
             <a class="nav-link" href="{% url 'tag_list_url' %}">Теги</a>
           </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <form action="{% url 'search_posts_url' %}" method="GET" class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" name="q" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </div>
@@ -67,11 +67,11 @@
           <ul class="pagination">
             {% if page_obj.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?page=1">Начало</a>
+              <a class="page-link" href="?page={{ page_obj.first }}&q={{ query }}">Начало</a>
             </li>
         
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ query }}">{{ page_obj.previous_page_number }}</a>
             </li>
             {% endif %}
             
@@ -81,10 +81,10 @@
             
             {% if page_obj.has_next %}
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ query }}">{{ page_obj.next_page_number }}</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Конец</a>
+              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&q={{ query }}">Конец</a>
             </li>
             {% endif %}  
           </ul>
