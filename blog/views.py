@@ -131,10 +131,10 @@ class TagListView(ListView):
     paginate_by = 4
 
 
-class TagDetailView(View):
+class TagDetailView(View):    
     def get(self, request, slug):
         tag = get_object_or_404(Tag, slug__iexact=slug)
-        return render(request, 'blog/tag_detail.html', context={'tag': tag, 'posts': Post.objects.filter(tags=tag, draft_status=False).order_by('-date_pub')})
+        return render(request, 'blog/tag_detail.html', context={'tag': tag, 'posts': Post.objects.filter(tags=tag, draft_status=False)})
 
 
 def LikeView(request, pk):
