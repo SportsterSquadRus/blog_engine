@@ -10,24 +10,8 @@
 
 <form action="{{ post.get_update_url }}" method="POST">
     {% csrf_token %}
-    
-    {% for field in form %}
-    <div class="form-group">
-        {% if field.errors %}
-        <div class="alert alert-danger">{{ field.errors }}</div>        
-        {% endif %}
-    
-    {% if field.label != 'Черновик' or post.draft_status %}
-    {{ field.label }}
-    {{ field }} 
-    {% endif %}
-            
-
-            
-
-    </div>
-        
-    {% endfor %}
+    {{form.media}}
+    {{form.as_p}}
     <button type="submit" class="btn btn-outline-primary">Редактировать пост</button>
         
 
