@@ -1,12 +1,13 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views.generic import View, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Post
+from .models import Post, Like
 from .forms import PostForm
 from django.utils import timezone
 from django.contrib.auth import models
 from taggit.models import Tag
 from django.db.models import Q
+from django.contrib.contenttypes.models import ContentType
 
 
 class PostsListView(ListView):
@@ -42,6 +43,15 @@ class PostDetailView(DetailView):
     model = Post
     template_name = "blog/post_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = kwargs['object']
+        if len(post.likes.filter(user=self.request.user)) == 0:
+            context['allreadylike'] = False
+        else:
+            context['allreadylike'] = True
+        return context
+
 
 class SearchView(ListView):
     paginate_by = 4
@@ -69,9 +79,9 @@ class PostCreateView(LoginRequiredMixin, View):
         if bound_form.is_valid():
             new_post = bound_form.save()
             new_post.author = request.user
-            if '<cut>' in new_post.body:
+            if '!cut!' in new_post.body:
                 new_post.truncate = len(
-                    new_post.body[:new_post.body.find('<cut>')].split())
+                    new_post.body[:new_post.body.find('!cut!')])
             else:
                 new_post.truncate = 50
             if new_post.draft_status == False:
@@ -109,9 +119,9 @@ class PostUpdateView(LoginRequiredMixin, View):
 
         if bound_form.is_valid():
             new_post = bound_form.save()
-            if '<cut>' in new_post.body:
+            if '!cut!' in new_post.body:
                 new_post.truncate = len(
-                    new_post.body[:new_post.body.find('<cut>')].split())
+                    new_post.body[:new_post.body.find('!cut!')])
             else:
                 new_post.truncate = 50
             if post.draft_status == True and new_post.draft_status == False:
@@ -147,8 +157,11 @@ class TagDetailView(ListView):
         return context
 
 
-def LikeView(request, pk):
+def PostLikeView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    if request.user not in post.likes.all():
-        post.likes.add(request.user)
+    obj_type = ContentType.objects.get_for_model(post)
+    if len(post.likes.filter(user=request.user)) == 0:        
+        like, is_created = Like.objects.get_or_create(content_type=obj_type, object_id=post.id, user=request.user)
+    else:
+        Like.objects.filter(content_type=obj_type, object_id=post.id, user=request.user).delete()
     return redirect(reverse('post_detail_url', args=[str(pk)]))
