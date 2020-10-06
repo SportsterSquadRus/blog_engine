@@ -13,6 +13,13 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 
+class UserPage(View):
+    def get(self, request, pk):
+        user = models.User.objects.get(pk=pk)
+        posts = Post.objects.filter(author = user)
+
+        return render(request, 'blog/user_page.html', context={'user': user, 'posts': posts})
+
 
 class PostsListView(ListView):
     model = Post

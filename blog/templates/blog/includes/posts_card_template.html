@@ -1,6 +1,6 @@
 <div class="card mb-5">
   <div class="card-header">
-      <a href="{% url 'author_posts_list_url' post.author.username %}">{{ post.author }}</a> {{ post.date_pub }}       
+      <a href="{% url 'user_page_url' post.author.id %}">{{ post.author }}</a> {{ post.date_pub }}       
   </div>
   
   <!-- {% if post.cover_url %}
