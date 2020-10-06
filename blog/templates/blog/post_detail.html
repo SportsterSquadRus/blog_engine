@@ -9,10 +9,12 @@
 {% block content %}
 
 <div class="card" style="width: 70rem;">
+  <div class="card-header">{{ post.date_pub }}</div>
   {% if post.cover_url %}
   <img src="{{ post.cover_url }}" class="card-img-top" alt="Обложка">  
   {% endif %}
     <div class="card-body">
+      
       <h5 class="card-title">{{ post.title }} - {{ post.author }}</h5> 
       <p class="card-text">{{ post.body|safe|cut:'!cut!' }}</p>
 
@@ -45,19 +47,14 @@
       {% endfor %}   
           
     </div>
-    Комментариев: {{ comments.count }}
+    <br>
+    <br>
+
+    Всего комментариев: {{ comments.count }}
+    <br>
+    <br>
     {% for comment in comments %}
-    <div class="card">
-      <div class="card-header">
-      {{ comment.date_pub }} 
-      </div>
-      <div class="card-body">
-        <h5 class="card-title">{{ comment.author }}</h5>
-        <p class="card-text">{{ comment.body }} </p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-      
+      {% include 'blog/includes/comment_card.html' %}
     {% endfor %}
     
     {% if request.user.is_authenticated %}

@@ -2,7 +2,7 @@
 
 
 {% block title %}
-Опубликованные посты {{ user.username }}
+Черновики
 {% endblock title %}
 
 
@@ -16,11 +16,11 @@
         
            
         <li class="nav-item">
-            <a class="nav-link active" href="{% url 'author_posts_list_url' user.username %}">Опубликованные посты</a>
+            <a class="nav-link" href="{% url 'author_posts_list_url' user.username %}">Опубликованные посты</a>
           </li>
         {% if user.id == request.user.id %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'drafts_list_url' %}" tabindex="-1" aria-disabled="true">Черновики</a>
+          <a class="nav-link active" href="{% url 'drafts_list_url' %}" tabindex="-1" aria-disabled="true">Черновики</a>
         </li>
         {% endif %}
       </ul>

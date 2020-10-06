@@ -13,6 +13,13 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 
+class UserPage(View):
+    def get(self, request, pk):
+        user = models.User.objects.get(pk=pk)
+        posts = Post.objects.filter(author = user)
+        rating = sum(map(lambda x: x.total_likes, posts)) + posts.count() * 10 + Comment.objects.filter(author=user).count() * 2
+        return render(request, 'blog/user_page.html', context={'user': user, 'posts': posts, 'rating': rating})
+
 
 class PostsListView(ListView):
     model = Post
@@ -24,7 +31,7 @@ class PostsListView(ListView):
 
 class DraftsListView(ListView):
     model = Post
-    template_name = "blog/posts_list.html"
+    template_name = "blog/drafts_list.html"
     context_object_name = 'posts'
     paginate_by = 4
 
