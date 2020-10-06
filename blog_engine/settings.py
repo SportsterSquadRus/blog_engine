@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
-    'allauth.socialaccount.providers.yandex',
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'like.apps.LikeConfig',
