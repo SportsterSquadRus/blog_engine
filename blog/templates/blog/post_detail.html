@@ -43,6 +43,21 @@
       {% endfor %}   
           
     </div>
+    Комментариев: {{ comments.count }}
+    {% for comment in comments %}
+    <div class="card">
+      <div class="card-header">
+      {{ comment.date_pub }} 
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ comment.author }}</h5>
+        <p class="card-text">{{ comment.body }} </p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+      
+    {% endfor %}
+      
     <br>
     <br>
     {% include 'blog/includes/add_comment.html' %}

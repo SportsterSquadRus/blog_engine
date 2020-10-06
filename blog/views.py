@@ -39,21 +39,54 @@ class AuthorPostsView(ListView):
         return Post.objects.filter(author=user, draft_status=False)
 
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = "blog/post_detail.html"
+class PostDetailView(View):
+    
+    def get(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        context = dict()
+        
+        context['post'] = post
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
         context['comment_form'] = CommentForm
-        print(dir(CommentForm))
-        post = kwargs['object']
+
+        context['comments'] = post.comments.all()
+
         if len(post.likes.filter(user=self.request.user)) == 0:
             context['allreadylike'] = False
         else:
             context['allreadylike'] = True
+        return render(request, "blog/post_detail.html", context=context)
+
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+
+        bound_form = CommentForm(request.POST)
+        if bound_form.is_valid():
+            new_comment = bound_form.save()
+            new_comment.author = request.user
+            new_comment.content_type = ContentType.objects.get_for_model(Post)
+            new_comment.object_id = post.id
+            new_comment.save()
+            return self.get(request, pk)
+        else:
+            return self.get(request, pk)
+
+
+
+# class PostDetailView(DetailView):
+#     model = Post
+#     template_name = "blog/post_detail.html"
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['comment_form'] = CommentForm
+#         post = kwargs['object']
+#         if len(post.likes.filter(user=self.request.user)) == 0:
+#             context['allreadylike'] = False
+#         else:
+#             context['allreadylike'] = True
             
-        return context
+#         return context
 
 
 class SearchView(ListView):
@@ -168,30 +201,3 @@ def PostLikeView(request, pk):
     else:
         Like.objects.filter(content_type=obj_type, object_id=post.id, user=request.user).delete()
     return redirect(reverse('post_detail_url', args=[str(pk)]))
-
-
-class AddCommentView(LoginRequiredMixin, View):
-    raise_exception = True
-
-    def get(self, request):
-        return render(request, "blog/post_detail.html", context={'form': CommentForm})
-
-    # def post(self, request):
-    #     bound_form = PostForm(request.POST)
-
-    #     if bound_form.is_valid():
-    #         new_post = bound_form.save()
-    #         new_post.author = request.user
-    #         if '!cut!' in new_post.body:
-    #             new_post.truncate = len(
-    #                 new_post.body[:new_post.body.find('!cut!')])
-    #         else:
-    #             new_post.truncate = 50
-    #         if new_post.draft_status == False:
-    #             new_post.date_pub = timezone.now()
-    #         new_post.save()
-
-    #         return redirect(new_post)
-    #     else:
-    #         return render(request, 'blog/post_create.html', context={'form': bound_form})
-
