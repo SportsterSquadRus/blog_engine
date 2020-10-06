@@ -31,7 +31,7 @@ class PostsListView(ListView):
 
 class DraftsListView(ListView):
     model = Post
-    template_name = "blog/posts_list.html"
+    template_name = "blog/drafts_list.html"
     context_object_name = 'posts'
     paginate_by = 4
 
