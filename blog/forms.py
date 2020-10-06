@@ -11,7 +11,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'body': forms.Textarea(attrs={'class': 'form-control'}),
-            'cover_url':forms.URLInput(attrs={'class': 'form-control'}),
+            'cover_url': forms.URLInput(attrs={'class': 'form-control'}),
             'draft_status': forms.CheckboxInput(attrs={'class': 'form-check'}),
             'tags': TagWidget(attrs={'class': 'form-control'}),
         }

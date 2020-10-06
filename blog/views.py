@@ -44,11 +44,11 @@ class AuthorPostsView(ListView):
 
 
 class PostDetailView(View):
-    
+
     def get(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
         context = dict()
-        
+
         context['post'] = post
 
         context['comment_form'] = CommentForm
@@ -56,7 +56,7 @@ class PostDetailView(View):
         context['comments'] = post.comments.all()
 
         if self.request.user.is_authenticated:
-            if  len(post.likes.filter(user=self.request.user)) == 0:
+            if len(post.likes.filter(user=self.request.user)) == 0:
                 context['allreadylike'] = False
             else:
                 context['allreadylike'] = True
@@ -74,31 +74,14 @@ class PostDetailView(View):
             new_comment.save()
             return redirect(reverse('post_detail_url', args=[str(pk)]))
         else:
-            context={'post': post, 'comment_form': CommentForm, 'comments':post.comments.all()}
+            context = {'post': post, 'comment_form': CommentForm,
+                       'comments': post.comments.all()}
             if self.request.user.is_authenticated:
-                if  len(post.likes.filter(user=self.request.user)) == 0:
+                if len(post.likes.filter(user=self.request.user)) == 0:
                     context['allreadylike'] = False
                 else:
                     context['allreadylike'] = True
-
             return render(request, "blog/post_detail.html", context=context)
-
-
-
-# class PostDetailView(DetailView):
-#     model = Post
-#     template_name = "blog/post_detail.html"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['comment_form'] = CommentForm
-#         post = kwargs['object']
-#         if len(post.likes.filter(user=self.request.user)) == 0:
-#             context['allreadylike'] = False
-#         else:
-#             context['allreadylike'] = True
-            
-#         return context
 
 
 class SearchView(ListView):
@@ -204,12 +187,15 @@ class TagDetailView(ListView):
         context['tag'] = Tag.objects.get(slug__iexact=self.kwargs['slug'])
         return context
 
+
 @login_required
 def PostLikeView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     obj_type = ContentType.objects.get_for_model(post)
-    if len(post.likes.filter(user=request.user)) == 0:        
-        like, is_created = Like.objects.get_or_create(content_type=obj_type, object_id=post.id, user=request.user)
+    if len(post.likes.filter(user=request.user)) == 0:
+        like, is_created = Like.objects.get_or_create(
+            content_type=obj_type, object_id=post.id, user=request.user)
     else:
-        Like.objects.filter(content_type=obj_type, object_id=post.id, user=request.user).delete()
+        Like.objects.filter(content_type=obj_type,
+                            object_id=post.id, user=request.user).delete()
     return redirect(reverse('post_detail_url', args=[str(pk)]))

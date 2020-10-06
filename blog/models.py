@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from comment.models import Comment
 from like.models import Like
 
+
 class Post(models.Model):
     title = models.CharField(max_length=150, verbose_name='Название')
     body = RichTextField(verbose_name='Текст поста')
@@ -39,7 +40,3 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-date_pub']
-
-
-
-
