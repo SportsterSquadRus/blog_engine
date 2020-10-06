@@ -1,13 +1,17 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views.generic import View, ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Post, Like, Comment
-from .forms import PostForm, CommentForm
+from .models import Post
+from comment.models import Comment
+from like.models import Like
+from .forms import PostForm
+from comment.forms import CommentForm
 from django.utils import timezone
 from django.contrib.auth import models
 from taggit.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.decorators import login_required
 
 
 class PostsListView(ListView):
@@ -51,10 +55,13 @@ class PostDetailView(View):
 
         context['comments'] = post.comments.all()
 
-        if len(post.likes.filter(user=self.request.user)) == 0:
-            context['allreadylike'] = False
-        else:
-            context['allreadylike'] = True
+        print(request.user)
+        if self.request.user.is_authenticated:
+            if  len(post.likes.filter(user=self.request.user)) == 0:
+                context['allreadylike'] = False
+            else:
+                context['allreadylike'] = True
+            print(request.user, 'lalala')
         return render(request, "blog/post_detail.html", context=context)
 
     def post(self, request, pk):
@@ -192,7 +199,7 @@ class TagDetailView(ListView):
         context['tag'] = Tag.objects.get(slug__iexact=self.kwargs['slug'])
         return context
 
-
+@login_required
 def PostLikeView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     obj_type = ContentType.objects.get_for_model(post)

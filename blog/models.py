@@ -6,28 +6,8 @@ from taggit.managers import TaggableManager
 from ckeditor.fields import RichTextField
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-
-class Like(models.Model):
-    user = models.ForeignKey('auth.User', related_name='likes', on_delete=models.CASCADE)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
-
-
-class Comment(models.Model):
-    author = models.ForeignKey('auth.User', related_name='comment', on_delete=models.CASCADE, null=True)
-    body = models.TextField(verbose_name='Текст комментярия')
-    date_pub = models.DateTimeField(auto_now_add=True)
-    likes = GenericRelation(Like)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
-    object_id = models.PositiveIntegerField(null=True)
-    content_object = GenericForeignKey('content_type', 'object_id')
-
-
-        
-
-
-
+from comment.models import Comment
+from like.models import Like
 
 class Post(models.Model):
     title = models.CharField(max_length=150, verbose_name='Название')
@@ -44,10 +24,6 @@ class Post(models.Model):
     @property
     def total_likes(self):
         return self.likes.count()
-
-    # @property
-    # def get_content_type(self):
-    #     return ContentType.objects.get_for_models(self.__class__)
 
     def get_absolute_url(self):
         return reverse('post_detail_url', kwargs={'pk': self.pk})
