@@ -55,13 +55,11 @@ class PostDetailView(View):
 
         context['comments'] = post.comments.all()
 
-        print(request.user)
         if self.request.user.is_authenticated:
             if  len(post.likes.filter(user=self.request.user)) == 0:
                 context['allreadylike'] = False
             else:
                 context['allreadylike'] = True
-            print(request.user, 'lalala')
         return render(request, "blog/post_detail.html", context=context)
 
     def post(self, request, pk):
@@ -74,9 +72,16 @@ class PostDetailView(View):
             new_comment.content_type = ContentType.objects.get_for_model(Post)
             new_comment.object_id = post.id
             new_comment.save()
-            return self.get(request, pk)
+            return redirect(reverse('post_detail_url', args=[str(pk)]))
         else:
-            return self.get(request, pk)
+            context={'post': post, 'comment_form': CommentForm, 'comments':post.comments.all()}
+            if self.request.user.is_authenticated:
+                if  len(post.likes.filter(user=self.request.user)) == 0:
+                    context['allreadylike'] = False
+                else:
+                    context['allreadylike'] = True
+
+            return render(request, "blog/post_detail.html", context=context)
 
 
 
