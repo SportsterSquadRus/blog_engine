@@ -13,19 +13,21 @@
   <img src="{{ post.cover_url }}" class="card-img-top" alt="Обложка">  
   {% endif %}
     <div class="card-body">
-      <h5 class="card-title">{{ post.title }}</h5>
+      <h5 class="card-title">{{ post.title }} - {{ post.author }}</h5> 
       <p class="card-text">{{ post.body|safe|cut:'!cut!' }}</p>
 
       
         <form action="{% url 'like_post' post.pk %}" method="POST">
           {% csrf_token %}
         
-          {% if  post.author != request.user %}
-          {% if allreadylike == False %}
-          <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-outline-info">{{ post.total_likes }}</button>
+          {% if  post.author != request.user and request.user.is_authenticated %}
+            {% if allreadylike == False %}
+            <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-outline-info">{{ post.total_likes }}</button>
+            {% else %}
+            <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-info">{{ post.total_likes }}</button>
+            {% endif %} 
           {% else %}
-          <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-info">{{ post.total_likes }}</button>            
-          {% endif %}  
+          <div class="btn btn-outline-info">{{ post.total_likes }}</div>      
           {% endif %}          
           
           {% if request.user == post.author %}        
@@ -43,5 +45,31 @@
       {% endfor %}   
           
     </div>
+    Комментариев: {{ comments.count }}
+    {% for comment in comments %}
+    <div class="card">
+      <div class="card-header">
+      {{ comment.date_pub }} 
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ comment.author }}</h5>
+        <p class="card-text">{{ comment.body }} </p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+      
+    {% endfor %}
+    
+    {% if request.user.is_authenticated %}
+    <br>
+    <br>
+    {% include 'blog/includes/add_comment.html' %}      
+    {% endif %}
+      
+      
+
   </div>
+
+
+
 {% endblock content %}

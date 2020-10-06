@@ -1,13 +1,17 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import View, ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Post, Like
+from .models import Post
+from comment.models import Comment
+from like.models import Like
 from .forms import PostForm
+from comment.forms import CommentForm
 from django.utils import timezone
 from django.contrib.auth import models
 from taggit.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.decorators import login_required
 
 
 class PostsListView(ListView):
@@ -39,18 +43,45 @@ class AuthorPostsView(ListView):
         return Post.objects.filter(author=user, draft_status=False)
 
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = "blog/post_detail.html"
+class PostDetailView(View):
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        post = kwargs['object']
-        if len(post.likes.filter(user=self.request.user)) == 0:
-            context['allreadylike'] = False
+    def get(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        context = dict()
+
+        context['post'] = post
+
+        context['comment_form'] = CommentForm
+
+        context['comments'] = post.comments.all()
+
+        if self.request.user.is_authenticated:
+            if len(post.likes.filter(user=self.request.user)) == 0:
+                context['allreadylike'] = False
+            else:
+                context['allreadylike'] = True
+        return render(request, "blog/post_detail.html", context=context)
+
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+
+        bound_form = CommentForm(request.POST)
+        if bound_form.is_valid():
+            new_comment = bound_form.save()
+            new_comment.author = request.user
+            new_comment.content_type = ContentType.objects.get_for_model(Post)
+            new_comment.object_id = post.id
+            new_comment.save()
+            return redirect(reverse('post_detail_url', args=[str(pk)]))
         else:
-            context['allreadylike'] = True
-        return context
+            context = {'post': post, 'comment_form': CommentForm,
+                       'comments': post.comments.all()}
+            if self.request.user.is_authenticated:
+                if len(post.likes.filter(user=self.request.user)) == 0:
+                    context['allreadylike'] = False
+                else:
+                    context['allreadylike'] = True
+            return render(request, "blog/post_detail.html", context=context)
 
 
 class SearchView(ListView):
@@ -157,11 +188,14 @@ class TagDetailView(ListView):
         return context
 
 
+@login_required
 def PostLikeView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     obj_type = ContentType.objects.get_for_model(post)
-    if len(post.likes.filter(user=request.user)) == 0:        
-        like, is_created = Like.objects.get_or_create(content_type=obj_type, object_id=post.id, user=request.user)
+    if len(post.likes.filter(user=request.user)) == 0:
+        like, is_created = Like.objects.get_or_create(
+            content_type=obj_type, object_id=post.id, user=request.user)
     else:
-        Like.objects.filter(content_type=obj_type, object_id=post.id, user=request.user).delete()
+        Like.objects.filter(content_type=obj_type,
+                            object_id=post.id, user=request.user).delete()
     return redirect(reverse('post_detail_url', args=[str(pk)]))

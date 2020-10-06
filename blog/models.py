@@ -6,12 +6,8 @@ from taggit.managers import TaggableManager
 from ckeditor.fields import RichTextField
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-
-class Like(models.Model):
-    user = models.ForeignKey('auth.User', related_name='likes', on_delete=models.CASCADE)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
+from comment.models import Comment
+from like.models import Like
 
 
 class Post(models.Model):
@@ -24,7 +20,7 @@ class Post(models.Model):
     truncate = models.IntegerField(default=0)
     tags = TaggableManager(verbose_name='Теги')
     likes = GenericRelation(Like)
-    # likes = models.ManyToManyField(auth.models.User, related_name='blog_posts')
+    comments = GenericRelation(Comment)
 
     @property
     def total_likes(self):
@@ -44,7 +40,3 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-date_pub']
-
-
-
-
