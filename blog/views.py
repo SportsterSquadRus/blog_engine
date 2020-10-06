@@ -1,8 +1,8 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import View, ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Post, Like
-from .forms import PostForm
+from .models import Post, Like, Comment
+from .forms import PostForm, CommentForm
 from django.utils import timezone
 from django.contrib.auth import models
 from taggit.models import Tag
@@ -45,11 +45,14 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['comment_form'] = CommentForm
+        print(dir(CommentForm))
         post = kwargs['object']
         if len(post.likes.filter(user=self.request.user)) == 0:
             context['allreadylike'] = False
         else:
             context['allreadylike'] = True
+            
         return context
 
 
@@ -165,3 +168,30 @@ def PostLikeView(request, pk):
     else:
         Like.objects.filter(content_type=obj_type, object_id=post.id, user=request.user).delete()
     return redirect(reverse('post_detail_url', args=[str(pk)]))
+
+
+class AddCommentView(LoginRequiredMixin, View):
+    raise_exception = True
+
+    def get(self, request):
+        return render(request, "blog/post_detail.html", context={'form': CommentForm})
+
+    # def post(self, request):
+    #     bound_form = PostForm(request.POST)
+
+    #     if bound_form.is_valid():
+    #         new_post = bound_form.save()
+    #         new_post.author = request.user
+    #         if '!cut!' in new_post.body:
+    #             new_post.truncate = len(
+    #                 new_post.body[:new_post.body.find('!cut!')])
+    #         else:
+    #             new_post.truncate = 50
+    #         if new_post.draft_status == False:
+    #             new_post.date_pub = timezone.now()
+    #         new_post.save()
+
+    #         return redirect(new_post)
+    #     else:
+    #         return render(request, 'blog/post_create.html', context={'form': bound_form})
+

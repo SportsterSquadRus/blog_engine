@@ -14,6 +14,18 @@ class Like(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
 
 
+class Comment(models.Model):
+    user = models.ForeignKey('auth.User', related_name='comment', on_delete=models.CASCADE)
+    body = models.TextField(verbose_name='Текст комментярия')
+    date_pub = models.DateTimeField(auto_now_add=True)
+    likes = GenericRelation(Like)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+
+
+
 class Post(models.Model):
     title = models.CharField(max_length=150, verbose_name='Название')
     body = RichTextField(verbose_name='Текст поста')
@@ -24,7 +36,7 @@ class Post(models.Model):
     truncate = models.IntegerField(default=0)
     tags = TaggableManager(verbose_name='Теги')
     likes = GenericRelation(Like)
-    # likes = models.ManyToManyField(auth.models.User, related_name='blog_posts')
+    comments = GenericRelation(Comment)
 
     @property
     def total_likes(self):
