@@ -30,7 +30,11 @@
       <p class="card-text">Дата регистрации: - {{ user.date_joined }} </p>
       <p class="card-text">Последняя активность: - {{ user.last_login }} </p>
       <p class="card-text">Всего постов: - {{ posts.count }} </p>
+      <p class="card-text">Опыт: - {{ rating }} </p>
       <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+    <div class="progress">
+      <div class="progress-bar" style="width: 25%" role="progressbar" ></div>
     </div>
   </div>
   

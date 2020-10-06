@@ -17,8 +17,8 @@ class UserPage(View):
     def get(self, request, pk):
         user = models.User.objects.get(pk=pk)
         posts = Post.objects.filter(author = user)
-
-        return render(request, 'blog/user_page.html', context={'user': user, 'posts': posts})
+        rating = sum(map(lambda x: x.total_likes, posts)) + posts.count() * 10 + Comment.objects.filter(author=user).count() * 2
+        return render(request, 'blog/user_page.html', context={'user': user, 'posts': posts, 'rating': rating})
 
 
 class PostsListView(ListView):
