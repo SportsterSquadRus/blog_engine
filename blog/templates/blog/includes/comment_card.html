@@ -1,15 +1,30 @@
 <div class="card">
-    <div class="card-header">
-    {{ comment.date_pub }} 
-    </div>
-    <div class="card-body">
-      <h5 class="card-title">{{ comment.author }}</h5>
-      <p class="card-text">{{ comment.body }} </p>
-      
-      <form action="{% url 'like_comment' comment.pk %}" method="POST">
-        {% csrf_token %} 
-        <button type="submit" name="obj_id" value="{{ comment.id }}" class="btn btn-info">{{ comment.total_likes }}</button>
-      </form>
-
-    </div>
+  <div class="card-header">
+    {{ comment.date_pub }}
   </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ comment.author }}</h5>
+    <p class="card-text">{{ comment.body }} </p>
+
+    {% if  post.author != request.user and request.user.is_authenticated %}
+    {% load extras %}
+
+    <form action="{% url 'like_comment' comment.pk %}" method="POST">
+
+      {% csrf_token %}
+
+      {% if  comment.author != request.user and request.user.is_authenticated %}
+      {% if allreadylike == False %}
+      <button type="submit" name="obj_id" value="{{ comment.id }}"
+        class="btn btn-outline-info">{{ comment.total_likes }}</button>
+      {% else %}
+      <button type="submit" name="obj_id" value="{{ comment.id }}" class="btn btn-info">{{ comment.total_likes }}</button>
+      {% endif %}
+    </form>
+    {% else %}
+    <div class="btn btn-outline-info">{{ post.total_likes }}</div>
+    {% endif %}
+    {% endif %}
+
+  </div>
+</div>
