@@ -76,7 +76,7 @@ class PostDetailView(View):
         context['comments'] = post.comments.all()
 
         if self.request.user.is_authenticated:
-            if len(post.likes.filter(user=self.request.user)) == 0:
+            if post.likeOrNot(self.request.user):
                 context['allreadylike'] = False
             else:
                 context['allreadylike'] = True
