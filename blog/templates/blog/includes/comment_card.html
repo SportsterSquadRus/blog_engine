@@ -5,6 +5,11 @@
     <div class="card-body">
       <h5 class="card-title">{{ comment.author }}</h5>
       <p class="card-text">{{ comment.body }} </p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
+      
+      <form action="{% url 'like_comment' comment.pk %}" method="POST">
+        {% csrf_token %} 
+        <button type="submit" name="obj_id" value="{{ comment.id }}" class="btn btn-info">{{ comment.total_likes }}</button>
+      </form>
+
     </div>
   </div>
