@@ -33,7 +33,17 @@ class UserPage(View):
         comments = Comment.objects.filter(author = user)
         func = lambda x: x.total_likes
         rating = sum(map(func, posts)) + sum(map(func, comments)) + posts.count() * 10 + comments.count() * 2
-        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating})
+
+        level = 1
+        lvl_min = 0
+        lvl_max = 50
+        while rating > lvl_max:
+            lvl_min, lvl_max = lvl_max, lvl_max + (lvl_max - lvl_min)*2
+            level += 1
+
+        part = int(100 * (rating - lvl_min) / (lvl_max - lvl_min))
+        print(part)
+        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
 
 
 class PostsListView(ListView):
