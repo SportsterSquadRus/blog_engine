@@ -3,6 +3,7 @@ blog_engine/__pycache__
 blog_env
 blog/__pycache__
 blog/migrations/__pycache__
+blog/templatetags/__pycache__
 like/__pycache__
 like/migrations/__pycache__
 comment/__pycache__

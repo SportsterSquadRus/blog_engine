@@ -20,3 +20,6 @@ class Comment(models.Model):
     @property
     def total_likes(self):
         return self.likes.count()
+
+    def likeOrNot(self, user):
+        return True if len(self.likes.filter(user=user)) == 0 else False
