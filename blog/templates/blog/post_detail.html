@@ -15,7 +15,7 @@
   {% endif %}
     <div class="card-body">
       
-      <h5 class="card-title">{{ post.title }} - {{ post.author }}</h5> 
+      <h5 class="card-title">{{ post.title }} - <a href="{% url 'user_page_url' post.author.id %}">{{ post.author }}</a></h5> 
       <p class="card-text">{{ post.body|safe|cut:'!cut!' }}</p>
 
       
