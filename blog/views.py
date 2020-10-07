@@ -30,7 +30,9 @@ class UserPage(View):
     def get(self, request, pk):
         user = models.User.objects.get(pk=pk)
         posts = Post.objects.filter(author = user)
-        rating = sum(map(lambda x: x.total_likes, posts)) + posts.count() * 10 + Comment.objects.filter(author=user).count() * 2
+        comments = Comment.objects.filter(author = user)
+        func = lambda x: x.total_likes
+        rating = sum(map(func, posts)) + sum(map(func, comments)) + posts.count() * 10 + Comment.objects.filter(author=user).count() * 2
         return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating})
 
 
