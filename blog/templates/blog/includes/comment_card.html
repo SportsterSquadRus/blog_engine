@@ -16,7 +16,7 @@
       {% if  comment.author != request.user and request.user.is_authenticated %}
       {% load extras %}
       {% likeOrNotTag comment request.user as commentlikeOrNotTag %}
-      {% if commentlikeOrNotTag == True %}
+      {% if commentlikeOrNotTag %}
       <button type="submit" name="obj_id" value="{{ comment.id }}"
         class="btn btn-outline-info">{{ comment.total_likes }}</button>
       {% else %}

@@ -23,7 +23,9 @@
           {% csrf_token %}
         
           {% if  post.author != request.user and request.user.is_authenticated %}
-            {% if allreadylike == False %}
+          {% load extras %}
+          {% likeOrNotTag post request.user as postlikeOrNotTag %}
+            {% if postlikeOrNotTag %}
             <button type="submit" name="obj_id" value="{{ post.id }}" class="btn btn-outline-info">{{ post.total_likes }}</button>
             {% else %}
             <button type="submit" name="obj_id" value="{{ post.id }}" class="btn btn-info">{{ post.total_likes }}</button>

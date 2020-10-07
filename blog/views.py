@@ -68,18 +68,9 @@ class PostDetailView(View):
     def get(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
         context = dict()
-
         context['post'] = post
-
         context['comment_form'] = CommentForm
-
         context['comments'] = post.comments.all()
-
-        if self.request.user.is_authenticated:
-            if post.likeOrNot(self.request.user):
-                context['allreadylike'] = False
-            else:
-                context['allreadylike'] = True
         return render(request, "blog/post_detail.html", context=context)
 
     def post(self, request, pk):
