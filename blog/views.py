@@ -12,6 +12,19 @@ from taggit.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
+from like.views import ObjectLikeFunc
+
+
+
+def PostLikeView(request, pk):
+    ObjectLikeFunc(request, pk, Post)
+    return redirect(reverse('post_detail_url', args=[str(pk)]))
+
+def CommentLikeView(request, pk):
+    ObjectLikeFunc(request, pk, Comment)
+    comment = Comment.objects.get(pk=pk)
+
+    return redirect(reverse('post_detail_url', args=[str(comment.object_id)]))
 
 class UserPage(View):
     def get(self, request, pk):
@@ -55,18 +68,9 @@ class PostDetailView(View):
     def get(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
         context = dict()
-
         context['post'] = post
-
         context['comment_form'] = CommentForm
-
         context['comments'] = post.comments.all()
-
-        if self.request.user.is_authenticated:
-            if len(post.likes.filter(user=self.request.user)) == 0:
-                context['allreadylike'] = False
-            else:
-                context['allreadylike'] = True
         return render(request, "blog/post_detail.html", context=context)
 
     def post(self, request, pk):
@@ -193,16 +197,3 @@ class TagDetailView(ListView):
         context = super().get_context_data(**kwargs)
         context['tag'] = Tag.objects.get(slug__iexact=self.kwargs['slug'])
         return context
-
-
-@login_required
-def PostLikeView(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    obj_type = ContentType.objects.get_for_model(post)
-    if len(post.likes.filter(user=request.user)) == 0:
-        like, is_created = Like.objects.get_or_create(
-            content_type=obj_type, object_id=post.id, user=request.user)
-    else:
-        Like.objects.filter(content_type=obj_type,
-                            object_id=post.id, user=request.user).delete()
-    return redirect(reverse('post_detail_url', args=[str(pk)]))

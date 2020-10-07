@@ -15,3 +15,11 @@ class Comment(models.Model):
         ContentType, on_delete=models.CASCADE, null=True)
     object_id = models.PositiveIntegerField(null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
+
+
+    @property
+    def total_likes(self):
+        return self.likes.count()
+
+    def likeOrNot(self, user):
+        return True if len(self.likes.filter(user=user)) == 0 else False
