@@ -59,7 +59,8 @@ class AuthorPostsView(ListView):
     template_name = 'blog/author_posts_list.html'
 
     def get_queryset(self):
-        user = user = models.User.objects.get(username=self.kwargs['username'])
+        user = models.User.objects.get(username=self.kwargs['username'])
+        print(user)
         return Post.objects.filter(author=user, draft_status=False)
 
 
