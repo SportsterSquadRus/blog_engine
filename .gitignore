@@ -3,4 +3,8 @@ blog_engine/__pycache__
 blog_env
 blog/__pycache__
 blog/migrations/__pycache__
+like/__pycache__
+like/migrations/__pycache__
+comment/__pycache__
+comment/migrations/__pycache__
 db.sqlite3

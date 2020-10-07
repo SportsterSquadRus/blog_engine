@@ -1,0 +1,36 @@
+{% extends 'blog/base_blog.html' %}
+
+
+{% block title %}
+Опубликованные посты {{ user.username }}
+{% endblock title %}
+
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'user_page_url' user.id %}">Основная информация</a>
+        </li>
+        
+           
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'author_posts_list_url' user.username %}">Опубликованные посты</a>
+          </li>
+        {% if user.id == request.user.id %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'drafts_list_url' %}" tabindex="-1" aria-disabled="true">Черновики</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="card-body">
+    {% for post in posts %}
+    {% include 'blog/includes/posts_card_template.html' %}
+    {% endfor %}
+     
+    </div>
+  </div>
+  
+{% endblock content %}

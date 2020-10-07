@@ -44,9 +44,42 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
-    'blog.apps.BlogConfig'
+    'blog.apps.BlogConfig',
+    'comment.apps.CommentConfig',
+    'like.apps.LikeConfig',
+    'taggit',
+    'ckeditor'
 
 ]
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            ['Undo', 'Redo',
+             '-', 'Bold', 'Italic', 'Underline', 'Strike',
+             '-', 'Link', 'Unlink', 'Anchor',
+             '-', 'Format',
+             '-', 'Maximize',
+             '-', 'Table',
+             '-', 'Image','Smiley', 'SpecialChar',
+             '-', 'Source',
+             '-', 'NumberedList', 'BulletedList'
+            ],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',
+             '-', 'Font', 'FontSize', 'TextColor',
+             '-', 'Outdent', 'Indent',
+             '-', 'HorizontalRule',
+             '-', 'Blockquote'
+            ]
+        ],
+        'height': 500,
+        'width': '100%',
+        'toolbarCanCollapse': False,
+        'forcePasteAsPlainText': True
+    }
+}
+
+TAGGIT_CASE_INSENSITIVE = True
 
 SITE_ID = 1
 

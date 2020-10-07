@@ -1,0 +1,18 @@
+{% extends 'blog/base_blog.html' %}
+
+
+{% block title %}
+Создание поста - {{ block.super }}   
+{% endblock title %}
+
+
+{% block content %}
+<form action="{{ post_create_url }}" method="post">
+{% csrf_token %}
+{{form.media}}
+{{form.as_p}}
+<button type="submit" class="btn btn-outline-primary">Создать пост</button>
+</form> 
+    
+
+{% endblock content %}
