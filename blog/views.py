@@ -102,11 +102,6 @@ class PostDetailView(View):
         else:
             context = {'post': post, 'comment_form': CommentForm,
                        'comments': post.comments.all()}
-            if self.request.user.is_authenticated:
-                if len(post.likes.filter(user=self.request.user)) == 0:
-                    context['allreadylike'] = False
-                else:
-                    context['allreadylike'] = True
             return render(request, "blog/post_detail.html", context=context)
 
 
