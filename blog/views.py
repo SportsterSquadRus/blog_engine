@@ -12,13 +12,38 @@ from taggit.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
+from like.views import ObjectLikeFunc
+
+
+
+def PostLikeView(request, pk):
+    ObjectLikeFunc(request, pk, Post)
+    return redirect(reverse('post_detail_url', args=[str(pk)]))
+
+def CommentLikeView(request, pk):
+    ObjectLikeFunc(request, pk, Comment)
+    comment = Comment.objects.get(pk=pk)
+
+    return redirect(reverse('post_detail_url', args=[str(comment.object_id)]))
 
 class UserPage(View):
     def get(self, request, pk):
         user = models.User.objects.get(pk=pk)
         posts = Post.objects.filter(author = user)
-        rating = sum(map(lambda x: x.total_likes, posts)) + posts.count() * 10 + Comment.objects.filter(author=user).count() * 2
-        return render(request, 'blog/user_page.html', context={'user': user, 'posts': posts, 'rating': rating})
+        comments = Comment.objects.filter(author = user)
+        func = lambda x: x.total_likes
+        rating = sum(map(func, posts)) + sum(map(func, comments)) + posts.count() * 10 + comments.count() * 2
+
+        level = 1
+        lvl_min = 0
+        lvl_max = 50
+        while rating > lvl_max:
+            lvl_min, lvl_max = lvl_max, lvl_max + (lvl_max - lvl_min)*2
+            level += 1
+
+        part = int(100 * (rating - lvl_min) / (lvl_max - lvl_min))
+        print(part)
+        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
 
 
 class PostsListView(ListView):
@@ -46,8 +71,13 @@ class AuthorPostsView(ListView):
     template_name = 'blog/author_posts_list.html'
 
     def get_queryset(self):
-        user = user = models.User.objects.get(username=self.kwargs['username'])
+        user = models.User.objects.get(username=self.kwargs['username'])
         return Post.objects.filter(author=user, draft_status=False)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = models.User.objects.get(username=self.kwargs['username'])
+        return context
 
 
 class PostDetailView(View):
@@ -55,18 +85,9 @@ class PostDetailView(View):
     def get(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
         context = dict()
-
         context['post'] = post
-
         context['comment_form'] = CommentForm
-
         context['comments'] = post.comments.all()
-
-        if self.request.user.is_authenticated:
-            if len(post.likes.filter(user=self.request.user)) == 0:
-                context['allreadylike'] = False
-            else:
-                context['allreadylike'] = True
         return render(request, "blog/post_detail.html", context=context)
 
     def post(self, request, pk):
@@ -193,16 +214,3 @@ class TagDetailView(ListView):
         context = super().get_context_data(**kwargs)
         context['tag'] = Tag.objects.get(slug__iexact=self.kwargs['slug'])
         return context
-
-
-@login_required
-def PostLikeView(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    obj_type = ContentType.objects.get_for_model(post)
-    if len(post.likes.filter(user=request.user)) == 0:
-        like, is_created = Like.objects.get_or_create(
-            content_type=obj_type, object_id=post.id, user=request.user)
-    else:
-        Like.objects.filter(content_type=obj_type,
-                            object_id=post.id, user=request.user).delete()
-    return redirect(reverse('post_detail_url', args=[str(pk)]))

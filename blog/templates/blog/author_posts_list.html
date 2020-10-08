@@ -11,14 +11,15 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'user_page_url' user.id %}">Основная информация</a>
+          <a class="nav-link" href="{% url 'user_page_url' author.id %}">Основная информация</a>
         </li>
         
            
         <li class="nav-item">
-            <a class="nav-link active" href="{% url 'author_posts_list_url' user.username %}">Опубликованные посты</a>
+            <a class="nav-link active" href="{% url 'author_posts_list_url' author.username %}">Опубликованные посты</a>
           </li>
-        {% if user.id == request.user.id %}
+
+        {% if author.id == request.user.id %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'drafts_list_url' %}" tabindex="-1" aria-disabled="true">Черновики</a>
         </li>
@@ -26,6 +27,7 @@
       </ul>
     </div>
     <div class="card-body">
+      <h5 class="card-title">Посты пользователя {{ author.username }} </h5>
     {% for post in posts %}
     {% include 'blog/includes/posts_card_template.html' %}
     {% endfor %}
