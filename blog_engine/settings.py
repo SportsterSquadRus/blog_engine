@@ -48,36 +48,27 @@ INSTALLED_APPS = [
     'comment.apps.CommentConfig',
     'like.apps.LikeConfig',
     'taggit',
-    'ckeditor'
+    'martor',
 
 ]
+MARTOR_THEME = 'bootstrap'
 
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': [
-            ['Undo', 'Redo',
-             '-', 'Bold', 'Italic', 'Underline', 'Strike',
-             '-', 'Link', 'Unlink', 'Anchor',
-             '-', 'Format',
-             '-', 'Maximize',
-             '-', 'Table',
-             '-', 'Image','Smiley', 'SpecialChar',
-             '-', 'Source',
-             '-', 'NumberedList', 'BulletedList'
-            ],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',
-             '-', 'Font', 'FontSize', 'TextColor',
-             '-', 'Outdent', 'Indent',
-             '-', 'HorizontalRule',
-             '-', 'Blockquote'
-            ]
-        ],
-        'height': 500,
-        'width': '100%',
-        'toolbarCanCollapse': False,
-        'forcePasteAsPlainText': True
-    }
+MARTOR_ENABLE_CONFIGS = {
+    'emoji': 'false',
+    'imgur': 'false',
+    'mention': 'false',
+    'jquery': 'true',
+    'living': 'true',
+    'spellcheck': 'false',
+    'hljs': 'true',
 }
+
+MARTOR_TOOLBAR_BUTTONS = [
+    'bold', 'italic', 'horizontal', 
+    'unordered-list', 'ordered-list',
+    'link', 'image-link',
+    'direct-mention', 'toggle-maximize', 'help'
+]
 
 TAGGIT_CASE_INSENSITIVE = True
 
