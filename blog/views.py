@@ -40,10 +40,8 @@ class UserPage(View):
         while rating > lvl_max:
             lvl_min, lvl_max = lvl_max, lvl_max + (lvl_max - lvl_min)*2
             level += 1
-
         part = int(100 * (rating - lvl_min) / (lvl_max - lvl_min))
-        print(part)
-        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
+        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'part': part})
 
 
 class PostsListView(ListView):
@@ -138,9 +136,9 @@ class PostCreateView(LoginRequiredMixin, View):
         if bound_form.is_valid():
             new_post = bound_form.save()
             new_post.author = request.user
-            if '!cut!' in new_post.body:
+            if '----------' in new_post.body:
                 new_post.truncate = len(
-                    new_post.body[:new_post.body.find('!cut!')])
+                    new_post.body[:new_post.body.find('----------')])
             else:
                 new_post.truncate = 50
             if new_post.draft_status == False:
@@ -178,9 +176,9 @@ class PostUpdateView(LoginRequiredMixin, View):
 
         if bound_form.is_valid():
             new_post = bound_form.save()
-            if '!cut!' in new_post.body:
+            if '----------' in new_post.body:
                 new_post.truncate = len(
-                    new_post.body[:new_post.body.find('!cut!')])
+                    new_post.body[:new_post.body.find('----------')])
             else:
                 new_post.truncate = 50
             if post.draft_status == True and new_post.draft_status == False:

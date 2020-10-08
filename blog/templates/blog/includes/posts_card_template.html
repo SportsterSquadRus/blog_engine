@@ -1,3 +1,4 @@
+{% load martortags %}
 <div class="card mb-5">
   <div class="card-header">
       <a href="{% url 'user_page_url' post.author.id %}">{{ post.author }}</a> {{ post.date_pub }}       
@@ -9,7 +10,7 @@
      -->
   <div class="card-body">
     <h5 class="card-title">{{ post.title }}</h5>
-    <p class="card-text">{{ post.body|safe|truncatechars:post.truncate }}</p>
+    <p class="card-text">{{ post.body|truncatechars:post.truncate|safe_markdown }}</p>
     <hr>
     <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary">Читать</a>      
     {% if request.user == post.author %}        

@@ -66,8 +66,7 @@ MARTOR_ENABLE_CONFIGS = {
 MARTOR_TOOLBAR_BUTTONS = [
     'bold', 'italic', 'horizontal', 
     'unordered-list', 'ordered-list',
-    'link', 'image-link',
-    'direct-mention', 'toggle-maximize', 'help'
+    'link', 'image-link', 'toggle-maximize', 'help'
 ]
 
 TAGGIT_CASE_INSENSITIVE = True
