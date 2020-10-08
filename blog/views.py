@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 from like.views import ObjectLikeFunc
+from author.models import Profile
 
 
 
@@ -29,19 +30,10 @@ def CommentLikeView(request, pk):
 class UserPage(View):
     def get(self, request, pk):
         user = models.User.objects.get(pk=pk)
-        posts = Post.objects.filter(author = user)
-        comments = Comment.objects.filter(author = user)
-        func = lambda x: x.total_likes
-        rating = sum(map(func, posts)) + sum(map(func, comments)) + posts.count() * 10 + comments.count() * 2
+        user_profile, created = Profile.objects.get_or_create(user=user)
+        rating, part, lvl_min, lvl_max, level, posts = user_profile.rating(user) 
+        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
 
-        level = 1
-        lvl_min = 0
-        lvl_max = 50
-        while rating > lvl_max:
-            lvl_min, lvl_max = lvl_max, lvl_max + (lvl_max - lvl_min)*2
-            level += 1
-        part = int(100 * (rating - lvl_min) / (lvl_max - lvl_min))
-        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'part': part})
 
 
 class PostsListView(ListView):

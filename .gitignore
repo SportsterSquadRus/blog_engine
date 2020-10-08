@@ -8,4 +8,6 @@ like/__pycache__
 like/migrations/__pycache__
 comment/__pycache__
 comment/migrations/__pycache__
+author/__pycache__
+author/migrations/__pycache__
 db.sqlite3

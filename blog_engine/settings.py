@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'like.apps.LikeConfig',
+    'author.apps.AuthorConfig',
     'taggit',
     'martor',
 
