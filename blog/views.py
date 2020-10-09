@@ -11,39 +11,7 @@ from django.contrib.auth import models
 from taggit.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.decorators import login_required
-from like.views import ObjectLikeFunc
 
-
-
-def PostLikeView(request, pk):
-    ObjectLikeFunc(request, pk, Post)
-    return redirect(reverse('post_detail_url', args=[str(pk)]))
-
-def CommentLikeView(request, pk):
-    ObjectLikeFunc(request, pk, Comment)
-    comment = Comment.objects.get(pk=pk)
-
-    return redirect(reverse('post_detail_url', args=[str(comment.object_id)]))
-
-class UserPage(View):
-    def get(self, request, pk):
-        user = models.User.objects.get(pk=pk)
-        posts = Post.objects.filter(author = user)
-        comments = Comment.objects.filter(author = user)
-        func = lambda x: x.total_likes
-        rating = sum(map(func, posts)) + sum(map(func, comments)) + posts.count() * 10 + comments.count() * 2
-
-        level = 1
-        lvl_min = 0
-        lvl_max = 50
-        while rating > lvl_max:
-            lvl_min, lvl_max = lvl_max, lvl_max + (lvl_max - lvl_min)*2
-            level += 1
-
-        part = int(100 * (rating - lvl_min) / (lvl_max - lvl_min))
-        print(part)
-        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
 
 
 class PostsListView(ListView):
@@ -62,22 +30,6 @@ class DraftsListView(ListView):
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user, draft_status=True)
-
-
-class AuthorPostsView(ListView):
-    model = Post
-    paginate_by = 4
-    context_object_name = 'posts'
-    template_name = 'blog/author_posts_list.html'
-
-    def get_queryset(self):
-        user = models.User.objects.get(username=self.kwargs['username'])
-        return Post.objects.filter(author=user, draft_status=False)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['author'] = models.User.objects.get(username=self.kwargs['username'])
-        return context
 
 
 class PostDetailView(View):
@@ -104,11 +56,6 @@ class PostDetailView(View):
         else:
             context = {'post': post, 'comment_form': CommentForm,
                        'comments': post.comments.all()}
-            if self.request.user.is_authenticated:
-                if len(post.likes.filter(user=self.request.user)) == 0:
-                    context['allreadylike'] = False
-                else:
-                    context['allreadylike'] = True
             return render(request, "blog/post_detail.html", context=context)
 
 
@@ -138,9 +85,9 @@ class PostCreateView(LoginRequiredMixin, View):
         if bound_form.is_valid():
             new_post = bound_form.save()
             new_post.author = request.user
-            if '!cut!' in new_post.body:
+            if '----------' in new_post.body:
                 new_post.truncate = len(
-                    new_post.body[:new_post.body.find('!cut!')])
+                    new_post.body[:new_post.body.find('----------')])
             else:
                 new_post.truncate = 50
             if new_post.draft_status == False:
@@ -178,9 +125,9 @@ class PostUpdateView(LoginRequiredMixin, View):
 
         if bound_form.is_valid():
             new_post = bound_form.save()
-            if '!cut!' in new_post.body:
+            if '----------' in new_post.body:
                 new_post.truncate = len(
-                    new_post.body[:new_post.body.find('!cut!')])
+                    new_post.body[:new_post.body.find('----------')])
             else:
                 new_post.truncate = 50
             if post.draft_status == True and new_post.draft_status == False:
