@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 from django.contrib import auth
 from blog.models import Post
@@ -7,6 +8,7 @@ from comment.models import Comment
 
 class Profile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    date_birth = models.DateField(verbose_name='День рождения', blank=True, null=True)
 
 
     def rating(self, user):
@@ -24,3 +26,10 @@ class Profile(models.Model):
 
         part = int(100 * (rating - lvl_min) / (lvl_max - lvl_min))
         return rating, part, lvl_min, lvl_max, level, posts,
+
+    def age(self):
+        today = date.today()
+        print(self.date_birth)
+        # age = today.year - birthDate.year - ((today.month, today.day) < (birthDate.month, birthDate.day))   
+
+    

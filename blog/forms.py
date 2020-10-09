@@ -31,10 +31,3 @@ class PostForm(forms.ModelForm):
             if word in text:
                 raise forms.ValidationError("Вы позволили себе немного лишнего! Исправьте текст!")
         return text
-
-    def clean_tags(self):        
-        text = (self.cleaned_data['tags'])
-        for word in self.STOP_LIST:
-            if word in text:
-                raise forms.ValidationError("Вы позволили себе немного лишнего! Исправьте текст!")                
-        return text
