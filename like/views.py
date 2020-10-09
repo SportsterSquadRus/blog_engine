@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -27,4 +26,3 @@ def CommentLikeView(request, pk):
     comment = Comment.objects.get(pk=pk)
 
     return redirect(reverse('post_detail_url', args=[str(comment.object_id)]))
-    
