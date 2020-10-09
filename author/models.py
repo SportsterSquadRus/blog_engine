@@ -5,17 +5,17 @@ from blog.models import Post
 from comment.models import Comment
 
 
-
 class Profile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
-    date_birth = models.DateField(verbose_name='День рождения', blank=True, null=True)
-
+    date_birth = models.DateField(
+        verbose_name='День рождения', blank=True, null=True)
 
     def rating(self, user):
-        posts = Post.objects.filter(author = user)
-        comments = Comment.objects.filter(author = user)
-        func = lambda x: x.total_likes
-        rating = sum(map(func, posts)) + sum(map(func, comments)) + posts.count() * 10 + comments.count() * 2
+        posts = Post.objects.filter(author=user)
+        comments = Comment.objects.filter(author=user)
+        def func(x): return x.total_likes
+        rating = sum(map(func, posts)) + sum(map(func, comments)) + \
+            posts.count() * 10 + comments.count() * 2
 
         level = 1
         lvl_min = 0
@@ -30,4 +30,4 @@ class Profile(models.Model):
     def age(self):
         today = date.today()
         print(self.date_birth)
-        # age = today.year - birthDate.year - ((today.month, today.day) < (birthDate.month, birthDate.day))  
+        # age = today.year - birthDate.year - ((today.month, today.day) < (birthDate.month, birthDate.day))
