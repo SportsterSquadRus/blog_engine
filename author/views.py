@@ -10,8 +10,7 @@ class UserPage(View):
     def get(self, request, pk):
         user = models.User.objects.get(pk=pk)
         user_profile, created = Profile.objects.get_or_create(user=user)
-        rating, part, lvl_min, lvl_max, level, posts = user_profile.rating(
-            user)
+        rating, part, lvl_min, lvl_max, level, posts = user_profile.rating(user)
         return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
 
 

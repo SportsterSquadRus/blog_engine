@@ -9,7 +9,7 @@
      -->
      <div class="card-body">
       <h5 class="card-title">{{ post.title }}</h5>
-      <p class="card-text">{{ post.body|safe|truncatewords:post.truncate }}</p>
+      <p class="card-text">{{ post.body|truncatechars:post.truncate|safe }}</p>
       <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary">Читать</a>      
       {% if request.user == post.author %}        
       <a href="{{ post.get_update_url }}" class="btn btn-outline-dark">Редактировать</a>

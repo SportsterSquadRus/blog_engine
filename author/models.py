@@ -11,11 +11,10 @@ class Profile(models.Model):
         verbose_name='День рождения', blank=True, null=True)
 
     def rating(self, user):
-        posts = Post.objects.filter(author=user)
-        comments = Comment.objects.filter(author=user)
-        def func(x): return x.total_likes
-        rating = sum(map(func, posts)) + sum(map(func, comments)) + \
-            posts.count() * 10 + comments.count() * 2
+        posts = Post.objects.filter(author = user)
+        comments = Comment.objects.filter(author = user)
+        func = lambda x: x.total_likes
+        rating = sum(map(func, posts)) + sum(map(func, comments)) + posts.count() * 10 + comments.count() * 2
 
         level = 1
         lvl_min = 0
