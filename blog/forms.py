@@ -26,15 +26,8 @@ class PostForm(forms.ModelForm):
         return text
     
     def clean_title(self):        
-        text = (self.cleaned_data['body']).lower()
+        text = (self.cleaned_data['title']).lower()
         for word in self.STOP_LIST:
             if word in text:
                 raise forms.ValidationError("Вы позволили себе немного лишнего! Исправьте текст!")
-        return text
-
-    def clean_tags(self):        
-        text = (self.cleaned_data['body']).lower()
-        for word in self.STOP_LIST:
-            if word in text:
-                raise forms.ValidationError("Вы позволили себе немного лишнего! Исправьте текст!")                
         return text

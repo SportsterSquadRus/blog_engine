@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'like.apps.LikeConfig',
+    'author.apps.AuthorConfig',
     'taggit',
     'martor',
 
@@ -56,7 +57,7 @@ MARTOR_THEME = 'bootstrap'
 MARTOR_ENABLE_CONFIGS = {
     'emoji': 'false',
     'imgur': 'false',
-    'mention': 'false',
+    'mention': 'true',
     'jquery': 'true',
     'living': 'true',
     'spellcheck': 'false',
@@ -66,7 +67,22 @@ MARTOR_ENABLE_CONFIGS = {
 MARTOR_TOOLBAR_BUTTONS = [
     'bold', 'italic', 'horizontal', 
     'unordered-list', 'ordered-list',
-    'link', 'image-link', 'toggle-maximize', 'help'
+    'link', 'image-link', 'toggle-maximize', 'help', 'direct-mention'
+]
+CSRF_COOKIE_HTTPONLY = False
+MARTOR_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+
+    # Custom markdown extensions.
+    'martor.extensions.urlize',
+    'martor.extensions.del_ins',      # ~~strikethrough~~ and ++underscores++
+    'martor.extensions.mention',      # to parse markdown mention
+    'martor.extensions.emoji',        # to parse markdown emoji
+    'martor.extensions.mdx_video',    # to parse embed/iframe video
+    'martor.extensions.escape_html',  # to handle the XSS vulnerabilities
 ]
 
 TAGGIT_CASE_INSENSITIVE = True
