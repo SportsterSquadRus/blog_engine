@@ -7,16 +7,14 @@
   <img src="{{ post.cover_url }}" class="card-img-top" alt="Обложка">  
   {% endif %}
      -->
-  <div class="card-body">
-    <h5 class="card-title">{{ post.title }}</h5>
-    {% load martortags %}    
-    <p class="card-text">{{ post.body|truncatechars:post.truncate|safe_markdown }}</p>
-    <hr>
-    <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary">Читать</a>      
-    {% if request.user == post.author %}        
-    <a href="{{ post.get_update_url }}" class="btn btn-outline-dark">Редактировать</a>
-    {% endif %}
-  </div>  
+     <div class="card-body">
+      <h5 class="card-title">{{ post.title }}</h5>
+      <p class="card-text">{{ post.body|safe|truncatewords:post.truncate }}</p>
+      <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary">Читать</a>      
+      {% if request.user == post.author %}        
+      <a href="{{ post.get_update_url }}" class="btn btn-outline-dark">Редактировать</a>
+      {% endif %}
+    </div>  
   {% if post.cover_url %}
   <img src="{{ post.cover_url }}" class="card-img-top" alt="Обложка">  
   {% endif %}

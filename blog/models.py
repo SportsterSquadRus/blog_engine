@@ -3,8 +3,7 @@ from django.shortcuts import reverse
 from django.conf import settings
 from django.contrib import auth
 from taggit.managers import TaggableManager
-# from ckeditor.fields import RichTextField
-from martor.models import MartorField
+from ckeditor.fields import RichTextField
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from comment.models import Comment
@@ -13,7 +12,7 @@ from like.models import Like
 
 class Post(models.Model):
     title = models.CharField(max_length=150, verbose_name='Название')
-    body = MartorField(verbose_name='Текст поста')
+    body = RichTextField(verbose_name='Текст поста')
     date_pub = models.DateTimeField(null=True, blank=True)
     author = models.ForeignKey('auth.User', blank=True, null=True, on_delete=models.CASCADE)
     cover_url = models.URLField(verbose_name='Ссылка на обложку', max_length=300, blank=True, null=True)

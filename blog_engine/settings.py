@@ -49,41 +49,36 @@ INSTALLED_APPS = [
     'like.apps.LikeConfig',
     'author.apps.AuthorConfig',
     'taggit',
-    'martor',
+    'ckeditor'
 
 ]
-MARTOR_THEME = 'bootstrap'
 
-MARTOR_ENABLE_CONFIGS = {
-    'emoji': 'false',
-    'imgur': 'false',
-    'mention': 'true',
-    'jquery': 'true',
-    'living': 'true',
-    'spellcheck': 'false',
-    'hljs': 'true',
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            ['Undo', 'Redo',
+             '-', 'Bold', 'Italic', 'Underline', 'Strike',
+             '-', 'Link', 'Unlink', 'Anchor',
+             '-', 'Format',
+             '-', 'Maximize',
+             '-', 'Table',
+             '-', 'Image','Smiley', 'SpecialChar',
+             '-', 'Source',
+             '-', 'NumberedList', 'BulletedList'
+            ],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',
+             '-', 'Font', 'FontSize', 'TextColor',
+             '-', 'Outdent', 'Indent',
+             '-', 'HorizontalRule',
+             '-', 'Blockquote'
+            ]
+        ],
+        'height': 500,
+        'width': '100%',
+        'toolbarCanCollapse': False,
+        'forcePasteAsPlainText': True
+    }
 }
-
-MARTOR_TOOLBAR_BUTTONS = [
-    'bold', 'italic', 'horizontal', 
-    'unordered-list', 'ordered-list',
-    'link', 'image-link', 'toggle-maximize', 'help', 'direct-mention'
-]
-CSRF_COOKIE_HTTPONLY = False
-MARTOR_MARKDOWN_EXTENSIONS = [
-    'markdown.extensions.extra',
-    'markdown.extensions.nl2br',
-    'markdown.extensions.smarty',
-    'markdown.extensions.fenced_code',
-
-    # Custom markdown extensions.
-    'martor.extensions.urlize',
-    'martor.extensions.del_ins',      # ~~strikethrough~~ and ++underscores++
-    'martor.extensions.mention',      # to parse markdown mention
-    'martor.extensions.emoji',        # to parse markdown emoji
-    'martor.extensions.mdx_video',    # to parse embed/iframe video
-    'martor.extensions.escape_html',  # to handle the XSS vulnerabilities
-]
 
 TAGGIT_CASE_INSENSITIVE = True
 

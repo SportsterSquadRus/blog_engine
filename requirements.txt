@@ -4,6 +4,4 @@ pylint-django
 django
 django-allauth
 django-taggit
-requests
-markdown
-martor
+django-ckeditor
