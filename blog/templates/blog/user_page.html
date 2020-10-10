@@ -2,7 +2,7 @@
 
 
 {% block title %}
-{{ user.username }} page   
+{{ user.username }}
 {% endblock title %}
 
 
@@ -32,7 +32,9 @@
       <p class="card-text">Последняя активность: {{ author.last_login }}</p>
       <p class="card-text">Всего постов: {{ posts.count }} </p>
       <p class="card-text">Опыт: {{ rating }} </p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
+      {% if author.id == request.user.id %} 
+      <a href="{% url 'profile_edit_url' %}" class="btn btn-primary">Редактировать профиль</a>
+      {% endif %}
     </div>
     <div class="progress">
       <div class="progress-bar" role="progressbar" style="width: {{ part }}%;" aria-valuenow="{{ part }}" aria-valuemin="0" aria-valuemax="100">{{ part }}%</div>

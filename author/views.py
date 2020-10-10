@@ -4,6 +4,7 @@ from django.views import View
 from django.views.generic import ListView
 from author.models import Profile
 from blog.models import Post
+from .forms import ProfileForm
 
 
 class UserPage(View):
@@ -30,3 +31,9 @@ class AuthorPostsView(ListView):
         context['author'] = models.User.objects.get(
             username=self.kwargs['username'])
         return context
+
+class ProfileEditView(View):
+    def get(self, request):
+        user = models.User.objects.get(pk=request.user.id)
+        user_profile, created = Profile.objects.get_or_create(user=user)
+        return render(request, 'blog/profile_edit.html', {'form': ProfileForm })
