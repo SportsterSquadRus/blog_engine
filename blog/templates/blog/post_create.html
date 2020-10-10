@@ -18,7 +18,8 @@
     {{ field.label }}
     {{ field }} 
 {% endfor %}
-{{ tagform }}
+<label for="tagsInput">Введите желаемые Теги через пробел</label>
+<input type="text" id="tagsInput" name="tags" class="form-control">
 </div>    
 
 <button type="submit" class="btn btn-outline-primary">Создать пост</button>

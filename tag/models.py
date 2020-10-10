@@ -7,9 +7,4 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.tag_title
-
-    def save(self, *args, **kwargs):
-        titles = set(self.tag_title.split())
-        print('its model', titles)
         
-

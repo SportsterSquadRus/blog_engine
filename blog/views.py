@@ -11,8 +11,7 @@ from django.utils import timezone
 from tag.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
-from tag.forms import TagForm
-
+from .utils import banned_tags_check
 
 
 class PostsListView(ListView):
@@ -78,27 +77,35 @@ class PostCreateView(LoginRequiredMixin, View):
     raise_exception = True
 
     def get(self, request):
-        return render(request, 'blog/post_create.html', context={'form': PostForm, 'tagform': TagForm})
+        return render(request, 'blog/post_create.html', context={'form': PostForm})
 
     def post(self, request):
         bound_form = PostForm(request.POST)
-        tag_form = TagForm(request.POST)
 
-        if bound_form.is_valid() and tag_form.is_valid():
-            
-            
+        if bound_form.is_valid():
+
             new_post = bound_form.save()
             new_post.author = request.user
             if '<hr />' in new_post.body:
                 new_post.truncate = len(
                     new_post.body[:new_post.body.find('<hr />')])
             else:
-                new_post.truncate = 50
+                new_post.truncate = 50      
+            
+
+
             if new_post.draft_status == False:
                 new_post.date_pub = timezone.now()
             new_post.save()
-            new_tags = tag_form.save()
-            new_post.tags.add(new_tags)
+
+            tags_list = set(request.POST['tags'].split(' '))
+            clean_tags = banned_tags_check(tags_list)
+            for tag in clean_tags:
+                new_tag, created = Tag.objects.get_or_create(tag_title=tag)
+                new_post.tags.add(new_tag)
+
+
+
             return redirect(new_post)
         else:
             return render(request, 'blog/post_create.html', context={'form': bound_form})
