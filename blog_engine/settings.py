@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'comment.apps.CommentConfig',
     'like.apps.LikeConfig',
     'author.apps.AuthorConfig',
-    'taggit',
+    'tag.apps.TagConfig',
     'ckeditor'
 
 ]

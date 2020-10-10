@@ -8,7 +8,7 @@ from .forms import PostForm
 from comment.forms import CommentForm
 from django.utils import timezone
 # from django.contrib.auth import models
-from taggit.models import Tag
+from tag.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 

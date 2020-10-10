@@ -2,12 +2,13 @@ from django.db import models
 from django.shortcuts import reverse
 from django.conf import settings
 from django.contrib import auth
-from taggit.managers import TaggableManager
+# from taggit.managers import TaggableManager
 from ckeditor.fields import RichTextField
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from comment.models import Comment
 from like.models import Like
+from tag.models import Tag
 
 
 class Post(models.Model):
@@ -18,7 +19,7 @@ class Post(models.Model):
     cover_url = models.URLField(verbose_name='Ссылка на обложку', max_length=300, blank=True, null=True)
     draft_status = models.BooleanField(verbose_name='Черновик', default=False)
     truncate = models.IntegerField(default=0)
-    tags = TaggableManager(verbose_name='Теги')
+    tags = GenericRelation(Tag)
     likes = GenericRelation(Like)
     comments = GenericRelation(Comment)
 
