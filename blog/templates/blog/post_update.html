@@ -21,9 +21,11 @@
     {{ field.label }}
     {{ field }} 
     {% endif %}    
-    </div>
+    
         
     {% endfor %}
+    <input type="text" id="tagsInput" name="tags" class="form-control" maxlength="100" value="{{ post.tags }}">
+    </div>
         
     <button type="submit" class="btn btn-outline-primary">Редактировать пост</button>
         

@@ -139,6 +139,12 @@ class PostUpdateView(LoginRequiredMixin, View):
                 new_post.date_pub = timezone.now()
             new_post = bound_form.save()
 
+            tags_list = set(request.POST['tags'].split(' '))
+            clean_tags = banned_tags_check(tags_list)
+            for tag in clean_tags:
+                new_tag, created = Tag.objects.get_or_create(tag_title=tag)
+                new_post.tags.add(new_tag)
+
             return redirect(new_post)
         else:
             return render(request, 'blog_update.html', context={'form': bound_form, 'post': post})
