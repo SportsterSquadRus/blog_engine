@@ -122,11 +122,14 @@ class PostUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
         post = get_object_or_404(Post, pk=pk, author=request.user)
         bound_form = PostForm(instance=post)
-        return render(request, 'blog/post_update.html', context={'form': bound_form, 'post': post})
+        tags = ' '.join(map(lambda x:x.tag_title, post.tags.all()))
+
+        return render(request, 'blog/post_update.html', context={'form': bound_form, 'post': post, 'post_tags': tags})
 
     def post(self, request, pk):
         post = Post.objects.get(pk=pk)
         bound_form = PostForm(request.POST, instance=post)
+        tags = ' '.join(map(lambda x:x.tag_title, post.tags.all()))
 
         if bound_form.is_valid():
             new_post = bound_form.save()
@@ -147,4 +150,4 @@ class PostUpdateView(LoginRequiredMixin, View):
 
             return redirect(new_post)
         else:
-            return render(request, 'blog_update.html', context={'form': bound_form, 'post': post})
+            return render(request, 'blog_update.html', context={'form': bound_form, 'post': post, 'post_tags': tags})
