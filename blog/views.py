@@ -2,12 +2,9 @@ from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views.generic import View, ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post
-# from comment.models import Comment
-# from like.models import Like
 from .forms import PostForm
 from comment.forms import CommentForm
 from django.utils import timezone
-# from django.contrib.auth import models
 from tag.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
@@ -90,9 +87,7 @@ class PostCreateView(LoginRequiredMixin, View):
                 new_post.truncate = len(
                     new_post.body[:new_post.body.find('<hr />')])
             else:
-                new_post.truncate = 50      
-            
-
+                new_post.truncate = 50
 
             if new_post.draft_status == False:
                 new_post.date_pub = timezone.now()
@@ -103,8 +98,6 @@ class PostCreateView(LoginRequiredMixin, View):
             for tag in clean_tags:
                 new_tag, created = Tag.objects.get_or_create(tag_title=tag)
                 new_post.tags.add(new_tag)
-
-
 
             return redirect(new_post)
         else:
@@ -149,27 +142,3 @@ class PostUpdateView(LoginRequiredMixin, View):
             return redirect(new_post)
         else:
             return render(request, 'blog_update.html', context={'form': bound_form, 'post': post})
-
-
-class TagListView(ListView):
-    model = Tag
-    template_name = "blog/tags_list.html"
-    context_object_name = 'tags'
-    ordering = ['name']
-    paginate_by = 4
-
-
-class TagDetailView(ListView):
-    model = Post
-    template_name = "blog/tag_detail.html"
-    context_object_name = 'posts'
-    paginate_by = 4
-
-    def get_queryset(self, **kwargs):
-        tag = get_object_or_404(Tag, id=self.kwargs['id'])
-        return Post.objects.filter(tags=tag, draft_status=False)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tag'] = Tag.objects.get(id=self.kwargs['id'])
-        return context
