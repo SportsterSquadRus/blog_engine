@@ -144,8 +144,9 @@ class PostUpdateView(LoginRequiredMixin, View):
 
             tags_list = set(request.POST['tags'].split(' '))
             clean_tags = banned_tags_check(tags_list)
+            post.tags.clear()
             for tag in clean_tags:
-                new_tag, created = Tag.objects.get_or_create(tag_title=tag)
+                new_tag, created = Tag.objects.get_or_create(tag_title=tag)                
                 new_post.tags.add(new_tag)
 
             return redirect(new_post)
