@@ -98,10 +98,7 @@ class PostCreateView(LoginRequiredMixin, View):
                 new_post.date_pub = timezone.now()
             new_post.save()
             new_tags = tag_form.save()
-            new_tags.object_id = new_post.id
-            new_tags.content_type = ContentType.objects.get_for_model(new_post)
-            new_tags.save()
-
+            new_post.tags.add(new_tags)
             return redirect(new_post)
         else:
             return render(request, 'blog/post_create.html', context={'form': bound_form})

@@ -23,4 +23,4 @@ class TagForm(forms.ModelForm):
                     "Вы позволили себе немного лишнего! Исправьте текст!")
         
         print('its form', tags)
-        return list(tags)
+        return tagstring
