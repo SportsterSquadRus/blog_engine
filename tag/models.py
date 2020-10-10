@@ -3,14 +3,14 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 
 class Tag(models.Model):
-    title = models.CharField(unique=True, max_length=50)
+    tag_title = models.CharField(unique=True, max_length=50)
     content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True)
     object_id = models.PositiveIntegerField(null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
-        return self.title
+        return self.tag_title
 
     # def save(self, *args, **kwargs):
-    #     if self.
+    #     print('its model self', self)

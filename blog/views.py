@@ -11,6 +11,7 @@ from django.utils import timezone
 from tag.models import Tag
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
+from tag.forms import TagForm
 
 
 
@@ -77,12 +78,15 @@ class PostCreateView(LoginRequiredMixin, View):
     raise_exception = True
 
     def get(self, request):
-        return render(request, 'blog/post_create.html', context={'form': PostForm})
+        return render(request, 'blog/post_create.html', context={'form': PostForm, 'tagform': TagForm})
 
     def post(self, request):
         bound_form = PostForm(request.POST)
+        tag_form = TagForm(request.POST)
 
-        if bound_form.is_valid():
+        if bound_form.is_valid() and tag_form.is_valid():
+            
+            
             new_post = bound_form.save()
             new_post.author = request.user
             if '<hr />' in new_post.body:
@@ -93,6 +97,10 @@ class PostCreateView(LoginRequiredMixin, View):
             if new_post.draft_status == False:
                 new_post.date_pub = timezone.now()
             new_post.save()
+            new_tags = tag_form.save()
+            new_tags.object_id = new_post.id
+            new_tags.content_type = ContentType.objects.get_for_model(new_post)
+            new_tags.save()
 
             return redirect(new_post)
         else:
@@ -154,10 +162,10 @@ class TagDetailView(ListView):
     paginate_by = 4
 
     def get_queryset(self, **kwargs):
-        tag = get_object_or_404(Tag, slug__iexact=self.kwargs['slug'])
+        tag = get_object_or_404(Tag, id=self.kwargs['id'])
         return Post.objects.filter(tags=tag, draft_status=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tag'] = Tag.objects.get(slug__iexact=self.kwargs['slug'])
+        context['tag'] = Tag.objects.get(id=self.kwargs['id'])
         return context
