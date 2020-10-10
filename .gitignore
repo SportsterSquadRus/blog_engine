@@ -10,4 +10,6 @@ comment/__pycache__
 comment/migrations/__pycache__
 author/__pycache__
 author/migrations/__pycache__
+tag/__pycache__
+tag/migrations/__pycache__
 db.sqlite3
