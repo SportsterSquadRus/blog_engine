@@ -17,7 +17,6 @@ def ObjectLikeFunc(request, pk, model):
     user = models.User.objects.get(pk=request.user.id)
     user_profile, created = Profile.objects.get_or_create(user=user)
     lvl = user_profile.rating(user)[4]
-    print(lvl)
 
     if obj.likeOrNot(request.user):
         if lvl > 1:
