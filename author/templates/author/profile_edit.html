@@ -1,0 +1,30 @@
+{% extends 'blog/base_blog.html' %}
+
+
+{% block title %}
+{{ user.username }}
+{% endblock title %}
+
+
+{% block content %}
+
+<h2>Редактирование профиля {{request.user}}</h2>
+
+
+<form action="{{ profile_edit_url }}" method="POST">
+    {% csrf_token %}
+    {{form.media}}
+
+    {% for field in profile_form %}
+    <div class="form-group">
+        {% if field.errors %}
+        <div class="alert alert-danger">{{ field.errors }}</div>
+        {% endif %}
+        {{ field.label }}
+        {{ field }}
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+</form>
+{% endblock content %}
