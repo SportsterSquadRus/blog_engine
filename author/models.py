@@ -29,8 +29,5 @@ class Profile(models.Model):
 
     def age(self):
         today = date.today()
-        print(self.date_birth)
-        print(today)
         age = today.year - self.date_birth.year- ((today.month, today.day) < (self.date_birth.month, self.date_birth.day))
-        print(age)
         return age
