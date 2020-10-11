@@ -96,7 +96,10 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-ACCOUNT_FORMS = {'login': 'blog.forms.CustomLoginForm'}
+ACCOUNT_FORMS = {
+    'login': 'blog.forms.CustomLoginForm',
+    'signup': 'blog.forms.CustomSignupForm',
+    }
 
 
 AUTHENTICATION_BACKENDS = [
