@@ -9,12 +9,14 @@ from .forms import ProfileForm, UserForm
 
 class UserPage(View):
     def get(self, request, pk):
+        context = dict()
         user = models.User.objects.get(pk=pk)
         user_profile, created = Profile.objects.get_or_create(user=user)
-        rating, part, lvl_min, lvl_max, level, posts = user_profile.rating(
+        context['rating'], context['part'], context['lvl_min'], context['lvl_max'], context['level'], context['posts'] = user_profile.rating(
             user)
-        age = user_profile.age()
-        return render(request, 'author/user_page.html', context={'age':age, 'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
+        context['age'] = user_profile.age()
+        context['author'] = user
+        return render(request, 'author/user_page.html', context=context)
 
 
 class AuthorPostsView(ListView):
@@ -52,5 +54,3 @@ class ProfileEditView(View):
             return redirect(reverse('user_page_url', args=[str(request.user.id)]))
         else:
             return render(request, 'author/profile_edit.html', {'profile_form': profile_form})
-
-

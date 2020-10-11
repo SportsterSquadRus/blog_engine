@@ -1,7 +1,7 @@
 from django import forms
 from .models import Post
 from .utils import banned_words_check
-from allauth.account.forms import LoginForm, SignupForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm
+from allauth.account.forms import LoginForm, SignupForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, AddEmailForm
 
 
 class PostForm(forms.ModelForm):
@@ -43,9 +43,9 @@ class CustomSignupForm(SignupForm):
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
 
 
-class CustomSResetPasswordForm(ResetPasswordForm):
+class CustomResetPasswordForm(ResetPasswordForm):
     def __init__(self, *args, **kwargs):
-        super(CustomSResetPasswordForm, self).__init__(*args, **kwargs)
+        super(CustomResetPasswordForm, self).__init__(*args, **kwargs)
         self.fields['email'].widget = forms.EmailInput(attrs={'class': 'form-control'})
 
 
@@ -61,5 +61,10 @@ class CustomChangePasswordForm(ChangePasswordForm):
         self.fields['oldpassword'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
         self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
+
+class CustomAddEmailForm(AddEmailForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomAddEmailForm, self).__init__(*args, **kwargs)
+        self.fields['email'].widget = forms.EmailInput(attrs={'class': 'form-control'})
 
 

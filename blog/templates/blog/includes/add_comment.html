@@ -1,7 +1,11 @@
 
 <form method="POST">
-{% csrf_token %}
-{{comment_form.body }} 
-<input type="submit" value="Добавить комментарий" class="btn btn-outline-primary">    
-<!-- <button type="submit" class="btn btn-outline-primary">Добавить комментарий</button> -->
+<div class="form-group">
+<div class="mb-3">
+    {% csrf_token %}
+    {{comment_form.body }} 
+</div>
+
+<input type="submit" value="Добавить комментарий" class="btn btn-outline-primary">  
+</div>  
 </form> 

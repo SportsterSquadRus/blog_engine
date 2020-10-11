@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<div class="card" style="width: 70rem;">
+<div class="card mb-4" style="width: 70rem;">
   <div class="card-header">{{ post.date_pub }}</div>
   {% if post.cover_url %}
   <img src="{{ post.cover_url }}" class="card-img-top" alt="Обложка">  
@@ -21,7 +21,7 @@
         <form action="{% url 'like_post' post.pk %}" method="POST">
           {% csrf_token %}
         
-          {% if  post.author != request.user and request.user.is_authenticated %}
+          {% if  post.author != request.user and request.user.is_authenticated and level > 1 %}
           {% load extras %}
           {% likeOrNotTag post request.user as postlikeOrNotTag %}
             {% if postlikeOrNotTag %}
@@ -48,26 +48,20 @@
       {% endfor %}   
           
     </div>
-    <br>
-    <br>
+  </div> 
 
-    Всего комментариев: {{ comments.count }}
-    <br>
-    <br>
-    {% for comment in comments %}
-      {% include 'blog/includes/comment_card.html' %}
-    {% endfor %}
-    
-    {% if request.user.is_authenticated %}
-    <br>
-    <br>
+
+    <div class="mb-4">
+      Всего комментариев: {{ comments.count }}
+    </div>
+
+    <div class="mb-4">
+      {% for comment in comments %}
+        {% include 'blog/includes/comment_card.html' %}
+      {% endfor %}
+    </div>
+  
+    {% if request.user.is_authenticated %}  
     {% include 'blog/includes/add_comment.html' %}      
     {% endif %}
-      
-      
-
-  </div>
-
-
-
 {% endblock content %}
