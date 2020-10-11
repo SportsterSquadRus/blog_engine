@@ -9,6 +9,7 @@ class Profile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     date_birth = models.DateField(
         verbose_name='День рождения', blank=True, null=True)
+    email_hidden = models.BooleanField(default=True, verbose_name='Скрыть e-mail')
 
     def rating(self, user):
         posts = Post.objects.filter(author=user)
@@ -28,6 +29,10 @@ class Profile(models.Model):
         return rating, part, lvl_min, lvl_max, level, posts,
 
     def age(self):
-        today = date.today()
-        age = today.year - self.date_birth.year- ((today.month, today.day) < (self.date_birth.month, self.date_birth.day))
-        return age
+        if self.date_birth:
+            today = date.today()
+            age = today.year - self.date_birth.year- ((today.month, today.day) < (self.date_birth.month, self.date_birth.day))
+            return age
+        else:
+            return ''
+
