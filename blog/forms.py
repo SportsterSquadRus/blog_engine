@@ -1,6 +1,7 @@
 from django import forms
 from .models import Post
 from .utils import banned_words_check
+from allauth.account.forms import LoginForm
 
 
 class PostForm(forms.ModelForm):
@@ -22,3 +23,12 @@ class PostForm(forms.ModelForm):
     def clean_title(self):
         text = (self.cleaned_data['title']).lower()
         return banned_words_check(text)
+
+
+
+
+class CustomLoginForm(LoginForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomLoginForm, self).__init__(*args, **kwargs)
+        self.fields['login'].widget = forms.TextInput(attrs={'class': 'form-control'})
+        self.fields['password'].widget = forms.PasswordInput(attrs={'class': 'form-control'})

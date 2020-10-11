@@ -80,8 +80,6 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-TAGGIT_CASE_INSENSITIVE = True
-
 SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/blog/'
@@ -97,6 +95,9 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+ACCOUNT_FORMS = {'login': 'blog.forms.CustomLoginForm'}
+
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
