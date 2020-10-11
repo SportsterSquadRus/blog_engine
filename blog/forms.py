@@ -1,6 +1,5 @@
 from django import forms
 from .models import Post
-from tag.models import Tag
 from .utils import banned_words_check
 
 
