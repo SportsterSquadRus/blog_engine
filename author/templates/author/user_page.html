@@ -34,8 +34,17 @@
 
       <p class="card-text">Всего постов: {{ posts.count }} </p>
       <p class="card-text">Опыт: {{ rating }} </p>
-      {% if author.id == request.user.id %} 
-      <a href="{% url 'profile_edit_url' %}" class="btn btn-primary">Редактировать профиль</a>
+      {% if author.id == request.user.id %}
+      <div class="mb-3">
+        <a href="{% url 'profile_edit_url' %}" class="btn btn-primary">Редактировать профиль</a>
+      </div>
+      <div class="mb-3">
+        <a href="{% url 'account_email' %}" class="btn btn-outline-primary">Изменить email</a>
+      </div>
+      <div class="mb-3">
+        <a href="{% url 'account_change_password' %}" class="btn btn-outline-primary">Изменить пароль</a>
+      </div>   
+      
       {% endif %}
     </div>
     <div class="progress">
