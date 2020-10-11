@@ -43,12 +43,14 @@ class PostDetailView(View):
         post = get_object_or_404(Post, pk=pk)
 
         bound_form = CommentForm(request.POST)
-        if bound_form.is_valid():
+        if bound_form.is_valid() and 'comment_pause' not in request.session:
             new_comment = bound_form.save()
             new_comment.author = request.user
             new_comment.content_type = ContentType.objects.get_for_model(Post)
             new_comment.object_id = post.id
             new_comment.save()
+            request.session.set_expiry(10)
+            request.session['comment_pause'] = True
             return redirect(reverse('post_detail_url', args=[str(pk)]))
         else:
             context = {'post': post, 'comment_form': CommentForm,
@@ -79,7 +81,7 @@ class PostCreateView(LoginRequiredMixin, View):
     def post(self, request):
         bound_form = PostForm(request.POST)
 
-        if bound_form.is_valid():
+        if bound_form.is_valid() and 'post_pause' not in request.session:
 
             new_post = bound_form.save()
             new_post.author = request.user
@@ -98,6 +100,8 @@ class PostCreateView(LoginRequiredMixin, View):
             for tag in clean_tags:
                 new_tag, created = Tag.objects.get_or_create(tag_title=tag)
                 new_post.tags.add(new_tag)
+            request.session.set_expiry(60)
+            request.session['post_pause'] = True
 
             return redirect(new_post)
         else:
