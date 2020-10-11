@@ -21,7 +21,7 @@
         <form action="{% url 'like_post' post.pk %}" method="POST">
           {% csrf_token %}
         
-          {% if  post.author != request.user and request.user.is_authenticated %}
+          {% if  post.author != request.user and request.user.is_authenticated and level > 1 %}
           {% load extras %}
           {% likeOrNotTag post request.user as postlikeOrNotTag %}
             {% if postlikeOrNotTag %}
