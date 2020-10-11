@@ -27,7 +27,10 @@ class Profile(models.Model):
         part = int(100 * (rating - lvl_min) / (lvl_max - lvl_min))
         return rating, part, lvl_min, lvl_max, level, posts,
 
-    # def age(self):
-    #     today = date.today()
-    #     print(self.date_birth)
-        # age = today.year - birthDate.year - ((today.month, today.day) < (birthDate.month, birthDate.day))
+    def age(self):
+        today = date.today()
+        print(self.date_birth)
+        print(today)
+        age = today.year - self.date_birth.year- ((today.month, today.day) < (self.date_birth.month, self.date_birth.day))
+        print(age)
+        return age

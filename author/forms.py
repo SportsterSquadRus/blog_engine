@@ -1,4 +1,3 @@
-
 from django import forms
 from .models import Profile
 from django.contrib.auth import models
@@ -26,3 +25,13 @@ class UserForm(forms.ModelForm):
             'email': forms.DateInput(attrs={'class': 'form-control'}),
 
         }
+
+    def clean_username(self):
+        name = self.cleaned_data['username']
+        if models.User.objects.filter(username=name):
+            raise forms.ValidationError(
+                "Имя пользователя должно быть уникальным")
+        else:
+            return name
+
+

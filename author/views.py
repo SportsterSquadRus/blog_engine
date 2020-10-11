@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import models
 from django.views import View
 from django.views.generic import ListView
@@ -13,14 +13,16 @@ class UserPage(View):
         user_profile, created = Profile.objects.get_or_create(user=user)
         rating, part, lvl_min, lvl_max, level, posts = user_profile.rating(
             user)
-        return render(request, 'blog/user_page.html', context={'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
+        age = user_profile.age()
+        print(age)
+        return render(request, 'author/user_page.html', context={'age':age, 'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
 
 
 class AuthorPostsView(ListView):
     model = Post
     paginate_by = 4
     context_object_name = 'posts'
-    template_name = 'blog/author_posts_list.html'
+    template_name = 'author/author_posts_list.html'
 
     def get_queryset(self):
         user = models.User.objects.get(username=self.kwargs['username'])
@@ -36,11 +38,20 @@ class AuthorPostsView(ListView):
 class ProfileEditView(View):
     def get(self, request):
         user = models.User.objects.get(pk=request.user.id)
-        print(user)
-        print(user.username)
-        print(user.email)
-
         user_profile, created = Profile.objects.get_or_create(user=user)
         profile_form = ProfileForm(instance=user_profile)
-        user_form = UserForm(instance=user)
-        return render(request, 'blog/profile_edit.html', {'user_form': user_form, 'profile_form': profile_form})
+        return render(request, 'author/profile_edit.html', {'profile_form': profile_form})
+
+    def post(self, request):
+        user = models.User.objects.get(pk=request.user.id)
+        user_profile, created = Profile.objects.get_or_create(user=user)
+        profile_form = ProfileForm(request.POST, instance=user_profile)
+        user_form = UserForm(request.POST, instance=user)
+
+        if profile_form.is_valid():
+            new_profile = profile_form.save()
+            return redirect(reverse('user_page_url', args=[str(request.user.id)]))
+        else:
+            return render(request, 'author/profile_edit.html', {'profile_form': profile_form})
+
+

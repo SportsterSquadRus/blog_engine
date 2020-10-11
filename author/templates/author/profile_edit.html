@@ -8,19 +8,22 @@
 
 {% block content %}
 
+<h2>Редактирование профиля {{request.user}}</h2>
+
+
 <form action="{{ profile_edit_url }}" method="POST">
     {% csrf_token %}
     {{form.media}}
 
 
-    {% for field in user_form %}
+    <!-- {% for field in user_form %}
     <div class="form-group">
         {% if field.errors %}
         <div class="alert alert-danger">{{ field.errors }}</div>
         {% endif %}
         {{ field.label }}
         {{ field }}
-        {% endfor %}
+        {% endfor %} -->
 
 
 
