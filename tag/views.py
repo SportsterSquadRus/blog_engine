@@ -8,7 +8,7 @@ class TagListView(ListView):
     model = Tag
     template_name = "blog/tags_list.html"
     context_object_name = 'tags'
-    ordering = ['name']
+    ordering = ['tag_title']
     paginate_by = 4
 
 
