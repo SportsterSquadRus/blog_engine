@@ -14,7 +14,6 @@ class UserPage(View):
         rating, part, lvl_min, lvl_max, level, posts = user_profile.rating(
             user)
         age = user_profile.age()
-        print(age)
         return render(request, 'author/user_page.html', context={'age':age, 'author': user, 'posts': posts, 'rating': rating, 'level': level, 'lvl_max': lvl_max, 'lvl_min': lvl_min, 'part': part})
 
 
