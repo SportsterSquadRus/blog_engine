@@ -99,6 +99,7 @@ SOCIALACCOUNT_PROVIDERS = {
 ACCOUNT_FORMS = {
     'login': 'blog.forms.CustomLoginForm',
     'signup': 'blog.forms.CustomSignupForm',
+    'reset_password': 'blog.forms.CustomSResetPasswordForm'
     }
 
 
