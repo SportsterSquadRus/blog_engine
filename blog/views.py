@@ -42,23 +42,8 @@ class PostDetailView(View):
         context['post'] = post
         context['comment_form'] = CommentForm
         context['comments'] = post.comments.all()
+        context['object_id'] = post.id
         return render(request, "blog/post_detail.html", context=context)
-
-    def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-
-        bound_form = CommentForm(request.POST)
-        if bound_form.is_valid():
-            new_comment = bound_form.save()
-            new_comment.author = request.user
-            new_comment.content_type = ContentType.objects.get_for_model(Post)
-            new_comment.object_id = post.id
-            new_comment.save()
-            return redirect(reverse('post_detail_url', args=[str(pk)]))
-        else:
-            context = {'post': post, 'comment_form': CommentForm,
-                       'comments': post.comments.all()}
-            return render(request, "blog/post_detail.html", context=context)
 
 
 class SearchView(ListView):
