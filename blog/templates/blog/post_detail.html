@@ -48,7 +48,7 @@
       {% endfor %}   
           
     </div>
-  </div> 
+  
 
 
     <div class="mb-4">
@@ -64,4 +64,5 @@
     {% if request.user.is_authenticated %}
     {% include 'blog/includes/add_comment.html' %}      
     {% endif %}
+  </div> 
 {% endblock content %}
