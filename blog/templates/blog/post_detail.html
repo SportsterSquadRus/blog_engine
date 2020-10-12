@@ -61,7 +61,7 @@
       {% endfor %}
     </div>
   
-    {% if request.user.is_authenticated %}  
+    {% if request.user.is_authenticated %}
     {% include 'blog/includes/add_comment.html' %}      
     {% endif %}
 {% endblock content %}
