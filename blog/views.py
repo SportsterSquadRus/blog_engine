@@ -70,7 +70,7 @@ class PostCreateView(LoginRequiredMixin, View):
     def post(self, request):
         bound_form = PostForm(request.POST)
 
-        if bound_form.is_valid() and (time() - request.session['last_post']) > 60:
+        if bound_form.is_valid() and ('last_post' not in request.session or (time() - request.session['last_post']) > 60):
 
             new_post = bound_form.save()
             new_post.author = request.user
