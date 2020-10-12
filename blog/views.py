@@ -48,14 +48,12 @@ class PostDetailView(View):
         post = get_object_or_404(Post, pk=pk)
 
         bound_form = CommentForm(request.POST)
-        if bound_form.is_valid(): #and 'comment_pause' not in request.session:
+        if bound_form.is_valid():
             new_comment = bound_form.save()
             new_comment.author = request.user
             new_comment.content_type = ContentType.objects.get_for_model(Post)
             new_comment.object_id = post.id
             new_comment.save()
-            # request.session.set_expiry(10)
-            # request.session['comment_pause'] = True
             return redirect(reverse('post_detail_url', args=[str(pk)]))
         else:
             context = {'post': post, 'comment_form': CommentForm,
