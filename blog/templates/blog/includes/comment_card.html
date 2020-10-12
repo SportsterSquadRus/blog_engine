@@ -10,18 +10,19 @@
       {% csrf_token %}
 
       {% if  comment.author != request.user and request.user.is_authenticated %}
-      {% load extras %}
-      {% likeOrNotTag comment request.user as commentlikeOrNotTag %}
-      {% if commentlikeOrNotTag %}
-      <button type="submit" name="obj_id" value="{{ comment.id }}"
-        class="btn btn-outline-info">{{ comment.total_likes }}</button>
+        {% load extras %}
+        {% likeOrNotTag comment request.user as commentlikeOrNotTag %}
+        {% if commentlikeOrNotTag %}
+          <button type="submit" name="obj_id" value="{{ comment.id }}"
+            class="btn btn-outline-info">{{ comment.total_likes }}</button>
+          {% else %}
+          <button type="submit" name="obj_id" value="{{ comment.id }}" class="btn btn-info">{{ comment.total_likes }}</button>
+        {% endif %}
       {% else %}
-      <button type="submit" name="obj_id" value="{{ comment.id }}" class="btn btn-info">{{ comment.total_likes }}</button>
+        <div class="btn btn-outline-info">{{ comment.total_likes }}</div>
       {% endif %}
     </form>
-    {% else %}
-    <div class="btn btn-outline-info">{{ comment.total_likes }}</div>
-    {% endif %}
+
 
 
   </div>

@@ -42,7 +42,7 @@ class PostDetailView(View):
         context['post'] = post
         context['comment_form'] = CommentForm
         context['comments'] = post.comments.all()
-        context['obj_id'] = post.id
+        context['object_id'] = post.id
         return render(request, "blog/post_detail.html", context=context)
 
 
