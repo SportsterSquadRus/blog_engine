@@ -7,6 +7,7 @@
 
 
 {% block content %}
+{% load static %}
 <div class="card">
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
@@ -26,9 +27,15 @@
       </ul>
     </div>
     <div class="card-body">
-      <h4 class="card-title">{{ author.username }}</h4>      
-      <h5 class="card-title">Пользователь {{ level }}-го уровня</h5>
-      {% if author.id == request.user.id or not author.email_hidden %}  
+      <h4 class="card-title">
+        {{ author.username }}
+        {% if vk %}
+        <a href="{{ vk }}" target="blank"><img src="{% static 'images/vk-icon.jpg' %}" width="50" alt=""></a>
+        {% endif %}
+      </h4>
+      <h5 class="card-title">Пользователь {{ level }}-го уровня</h5>      
+
+      {% if author.id == request.user.id or not profile.email_hidden %}      
       <p class="card-text">e-mail: <a href="mailto:{{ author.email }}">{{ author.email }}</a></p>
       {% endif %}
       <p class="card-text">Возраст: {{ age }}</p>
@@ -41,6 +48,12 @@
       <div class="mb-3">
         <a href="{% url 'profile_edit_url' %}" class="btn btn-primary">Редактировать профиль</a>
       </div>
+      
+
+      <div class="mb-3">
+        <a href="{% url 'socialaccount_connections' %}" class="btn btn-outline-primary">Социальные сети</a>
+      </div>        
+
       <div class="mb-3">
         <a href="{% url 'account_email' %}" class="btn btn-outline-primary">Изменить email</a>
       </div>
