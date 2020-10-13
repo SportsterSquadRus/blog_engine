@@ -33,11 +33,9 @@
         <a href="{{ vk }}" target="blank"><img src="{% static 'images/vk-icon.jpg' %}" width="50" alt=""></a>
         {% endif %}
       </h4>
-      <h5 class="card-title">Пользователь {{ level }}-го уровня</h5>
-      
+      <h5 class="card-title">Пользователь {{ level }}-го уровня</h5>      
 
-        
-      {% if author.id == request.user.id or not author.email_hidden %}  
+      {% if author.id == request.user.id or not profile.email_hidden %}      
       <p class="card-text">e-mail: <a href="mailto:{{ author.email }}">{{ author.email }}</a></p>
       {% endif %}
       <p class="card-text">Возраст: {{ age }}</p>

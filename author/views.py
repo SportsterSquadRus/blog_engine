@@ -22,6 +22,7 @@ class UserPage(View):
             user)
         context['age'] = user_profile.age()
         context['author'] = user
+        context['profile'] = user_profile
         return render(request, 'author/user_page.html', context=context)
 
 
