@@ -5,6 +5,7 @@ from django.views.generic import ListView
 from author.models import Profile
 from blog.models import Post
 from .forms import ProfileForm, UserForm
+from allauth.socialaccount.models import SocialAccount
 
 
 class UserPage(View):
@@ -12,6 +13,11 @@ class UserPage(View):
         context = dict()
         user = models.User.objects.get(pk=pk)
         user_profile, created = Profile.objects.get_or_create(user=user)
+        try:
+            context['vk'] = SocialAccount.objects.get(user=user).get_profile_url()
+        except:
+            context['vk'] = ''
+            
         context['rating'], context['part'], context['lvl_min'], context['lvl_max'], context['level'], context['posts'] = user_profile.rating(
             user)
         context['age'] = user_profile.age()
