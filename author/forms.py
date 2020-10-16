@@ -14,26 +14,3 @@ class ProfileForm(forms.ModelForm):
             'email_hidden': forms.CheckboxInput(attrs={'class': 'form-check'})
 
         }
-
-
-class UserForm(forms.ModelForm):
-    class Meta:
-
-        model = models.User
-        fields = ('username', 'email')
-
-        widgets = {
-            'username': forms.DateInput(attrs={'class': 'form-control'}),
-            'email': forms.DateInput(attrs={'class': 'form-control'}),
-
-        }
-
-    def clean_username(self):
-        name = self.cleaned_data['username']
-        if models.User.objects.filter(username=name):
-            raise forms.ValidationError(
-                "Имя пользователя должно быть уникальным")
-        else:
-            return name
-
-

@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic import ListView
 from author.models import Profile
 from blog.models import Post
-from .forms import ProfileForm, UserForm
+from .forms import ProfileForm
 from allauth.socialaccount.models import SocialAccount
 
 
