@@ -144,3 +144,7 @@ class PostUpdateView(LoginRequiredMixin, View):
             return redirect(new_post)
         else:
             return render(request, 'blog_update.html', context={'form': bound_form, 'post': post, 'post_tags': tags})
+
+class Rules(View):
+    def get(self, request):
+        return render(request, 'blog/rules.html', context={})
