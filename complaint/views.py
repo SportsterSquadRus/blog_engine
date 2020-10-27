@@ -19,4 +19,8 @@ def PostComplaintView(request, pk):
 @login_required
 def CommentComplaintView(request, pk):
     comment = ObjectComplaintFunc(request, pk, Comment)
-    
+    if comment:
+        post = Post.objects.get(id=comment.object_id)
+    return redirect(reverse('post_detail_url', args=[str(comment.object_id)]))
+
+
