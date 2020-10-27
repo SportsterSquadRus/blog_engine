@@ -33,6 +33,9 @@ class Post(models.Model):
     def likeOrNot(self, user):
         return True if len(self.likes.filter(user=user)) == 0 else False
 
+    def complaintOrNot(self, user):
+        return True if len(self.complaint.filter(user=user)) == 0 else False
+
     def get_absolute_url(self):
         return reverse('post_detail_url', kwargs={'pk': self.pk})
 
