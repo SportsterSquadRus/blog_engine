@@ -9,8 +9,8 @@ def ObjectComplaintFunc(request, pk, model):
     user = models.User.objects.get(pk=request.user.id)
     send_mail(
     'Жалоба',
-    obj.body,
+    'http://127.0.0.1:8000{}'.format(obj.get_absolute_url()),
     passwords.email_pass()[0],
-    [passwords.stuff()[0]],
+    [passwords.stuff()],
     fail_silently=False,
 )
