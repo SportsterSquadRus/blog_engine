@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from blog.models import Post
+from comment.models import Comment
 from django.core.mail import send_mail
 from blog_engine import passwords
 from .utils import ObjectComplaintFunc
@@ -17,4 +18,5 @@ def PostComplaintView(request, pk):
 
 @login_required
 def CommentComplaintView(request, pk):
-    pass
+    comment = ObjectComplaintFunc(request, pk, Comment)
+    
