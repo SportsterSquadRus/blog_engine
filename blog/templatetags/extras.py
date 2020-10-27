@@ -8,3 +8,10 @@ def likeOrNotTag(context, obj, user):
         return True
     else:
         return False
+
+@register.simple_tag(takes_context=True)
+def complaintOrNotTag(context, obj, user):
+    if len(obj.complaint.filter(user=user)) == 0:
+        return True
+    else:
+        return False

@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from comment.models import Comment
 from like.models import Like
 from tag.models import Tag
+from complaint.models import Complaint
 
 
 class Post(models.Model):
@@ -23,6 +24,7 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag)
     likes = GenericRelation(Like)
     comments = GenericRelation(Comment)
+    complaint = GenericRelation(Complaint)
 
     @property
     def total_likes(self):
@@ -30,6 +32,9 @@ class Post(models.Model):
 
     def likeOrNot(self, user):
         return True if len(self.likes.filter(user=user)) == 0 else False
+
+    def complaintOrNot(self, user):
+        return True if len(self.complaint.filter(user=user)) == 0 else False
 
     def get_absolute_url(self):
         return reverse('post_detail_url', kwargs={'pk': self.pk})

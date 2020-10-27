@@ -46,11 +46,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.vk',
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
+    'complaint.apps.ComplaintConfig',
     'like.apps.LikeConfig',
     'author.apps.AuthorConfig',
     'tag.apps.TagConfig',
     'ckeditor'
-
 ]
 
 CKEDITOR_CONFIGS = {
