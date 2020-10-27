@@ -19,7 +19,6 @@ def PostComplaintView(request, pk):
 @login_required
 def CommentComplaintView(request, pk):
     comment, comp = ObjectComplaintFunc(request, pk, Comment)
-    print(comment)
     if comp:
         post = Post.objects.get(id=comment.object_id)
 
