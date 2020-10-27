@@ -23,5 +23,6 @@ urlpatterns = [
     path('user/', include('author.urls')),
     path('like/', include('like.urls')),
     path('tag/', include('tag.urls')),
-    path('comment/', include('comment.urls'))
+    path('comment/', include('comment.urls')),
+    path('complaint/', include('complaint.urls')),
 ]
