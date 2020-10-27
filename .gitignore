@@ -12,4 +12,6 @@ author/__pycache__
 author/migrations/__pycache__
 tag/__pycache__
 tag/migrations/__pycache__
+complaint/__pycache__
+complaint/migrations/__pycache__
 db.sqlite3
