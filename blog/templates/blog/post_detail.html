@@ -17,28 +17,52 @@
       <h5 class="card-title">{{ post.title }} - <a href="{% url 'user_page_url' post.author.id %}">{{ post.author }}</a></h5> 
       <p class="card-text">{{ post.body|safe }}</p>
 
-      
-        <form action="{% url 'like_post' post.pk %}" method="POST">
-          {% csrf_token %}
-        
-          {% if  post.author != request.user and request.user.is_authenticated and level > 1 %}
-          {% load extras %}
-          {% likeOrNotTag post request.user as postlikeOrNotTag %}
-            {% if postlikeOrNotTag %}
-            <button type="submit" name="obj_id" value="{{ post.id }}" class="btn btn-outline-info">{{ post.total_likes }}</button>
-            {% else %}
-            <button type="submit" name="obj_id" value="{{ post.id }}" class="btn btn-info">{{ post.total_likes }}</button>
-            {% endif %} 
-          {% else %}
-          <div class="btn btn-outline-info">{{ post.total_likes }}</div>      
-          {% endif %}          
+
+      <style>
+        table.text  {
+         width:  100%; /* Ширина таблицы */
+         border-spacing: 0; /* Расстояние между ячейками */
+        }
+        table.text td {
+         width: 50%; /* Ширина ячеек */
+         vertical-align: top; /* Выравнивание по верхнему краю */
+        }
+        td.rightcol { /* Правая ячейка */ 
+         text-align: right; /* Выравнивание по правому краю */
+        }
+       </style>
+
+      <table class="text">
+        <tr>
+        <td>
+          <form action="{% url 'like_post' post.pk %}" method="POST">
+            {% csrf_token %}
           
-          {% if request.user == post.author %}        
-          <a href="{{ post.get_update_url }}" class="btn btn-outline-primary">Редактировать</a>
-          <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
-          {% endif %}
-        
-        </form>
+            {% if  post.author != request.user and request.user.is_authenticated and level > 1 %}
+            {% load extras %}
+            {% likeOrNotTag post request.user as postlikeOrNotTag %}
+              {% if postlikeOrNotTag %}
+              <button type="submit" name="obj_id" value="{{ post.id }}" class="btn btn-outline-info">{{ post.total_likes }}</button>
+              {% else %}
+              <button type="submit" name="obj_id" value="{{ post.id }}" class="btn btn-info">{{ post.total_likes }}</button>
+              {% endif %} 
+            {% else %}
+            <div class="btn btn-outline-info">{{ post.total_likes }}</div>      
+            {% endif %}          
+            
+            {% if request.user == post.author %}        
+            <a href="{{ post.get_update_url }}" class="btn btn-outline-primary">Редактировать</a>
+            <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
+            {% endif %}        
+          </form>
+        </td>
+              <td class="rightcol">
+                {% if request.user != post.author and request.user.is_authenticated %}
+                <a href="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
+                {% endif %} 
+              </td>
+        </tr>
+        </table>
         
     </div>
     <div class="card-footer text-muted">
