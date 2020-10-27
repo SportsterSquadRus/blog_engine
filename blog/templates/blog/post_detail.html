@@ -57,7 +57,8 @@
           </form>
         </td>
               <td class="rightcol">
-                {% if request.user != post.author and request.user.is_authenticated %}
+                {% complaintOrNotTag post request.user as postComplaintOrNotTag %}
+                {% if request.user != post.author and request.user.is_authenticated and postComplaintOrNotTag %}
                 <a href="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
                 {% endif %} 
               </td>
