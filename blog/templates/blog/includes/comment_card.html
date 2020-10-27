@@ -6,23 +6,43 @@
 
 
     
+    <table class="text">
+      <tr>
+      <td>
+      <form action="{% url 'like_comment' comment.pk %}" method="POST">
+        {% csrf_token %}
 
-    <form action="{% url 'like_comment' comment.pk %}" method="POST">
-      {% csrf_token %}
-
-      {% if  comment.author != request.user and request.user.is_authenticated %}
-        {% load extras %}
-        {% likeOrNotTag comment request.user as commentlikeOrNotTag %}
-        {% if commentlikeOrNotTag %}
-          <button type="submit" name="obj_id" value="{{ comment.id }}"
-            class="btn btn-outline-info">{{ comment.total_likes }}</button>
-          {% else %}
-          <button type="submit" name="obj_id" value="{{ comment.id }}" class="btn btn-info">{{ comment.total_likes }}</button>
+        {% if  comment.author != request.user and request.user.is_authenticated %}
+          {% load extras %}
+          {% likeOrNotTag comment request.user as commentlikeOrNotTag %}
+          {% if commentlikeOrNotTag %}
+            <button type="submit" name="obj_id" value="{{ comment.id }}"
+              class="btn btn-outline-info">{{ comment.total_likes }}</button>
+            {% else %}
+            <button type="submit" name="obj_id" value="{{ comment.id }}" class="btn btn-info">{{ comment.total_likes }}</button>
+          {% endif %}
+        {% else %}
+          <div class="btn btn-outline-info">{{ comment.total_likes }}</div>
         {% endif %}
-      {% else %}
-        <div class="btn btn-outline-info">{{ comment.total_likes }}</div>
-      {% endif %}
-    </form>
+      </form>
+    </td>
+    <td class="rightcol">
+
+      {% complaintOrNotTag comment request.user as commentComplaintOrNotTag %}
+      {% if request.user != comment.author and request.user.is_authenticated %}
+      
+        {% if commentComplaintOrNotTag %}
+          <a href="{% url 'complaint_comment' comment.pk %}" >Пожаловаться</a>
+        {% else %}
+          Жалоба отправлена  
+          
+        {% endif %} 
+      {% endif %} 
+
+
+      </td>
+    </tr>
+    </table>
 
 
 
