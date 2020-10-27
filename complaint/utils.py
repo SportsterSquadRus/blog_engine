@@ -14,6 +14,7 @@ def ObjectComplaintFunc(request, pk, model):
     user_profile, created = Profile.objects.get_or_create(user=user)
     lvl = user_profile.rating(user)[4]
     if obj.complaintOrNot(request.user):
+
         if lvl > 1:
             complaint, is_created = Complaint.objects.get_or_create(
                 content_type=obj_type, object_id=obj.id, user=request.user)
