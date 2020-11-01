@@ -9,6 +9,8 @@ def ObjectLikeFunc(request, pk, model):
     obj = get_object_or_404(model, id=request.POST.get('content_id'))
     obj_type = ContentType.objects.get_for_model(obj)
 
+
+
     user = models.User.objects.get(pk=request.user.id)
     user_profile, created = Profile.objects.get_or_create(user=user)
     lvl = user_profile.rating(user)[4]
@@ -21,4 +23,4 @@ def ObjectLikeFunc(request, pk, model):
     else:
         Like.objects.filter(content_type=obj_type,
                             object_id=obj.id, user=request.user).delete()
-    return liked
+    return liked, obj.total_likes

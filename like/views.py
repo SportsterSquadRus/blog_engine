@@ -13,9 +13,11 @@ def PostLikeView(request, pk):
     if request.method == 'POST':
         if request.POST.get("operation") == "like_submit" and request.is_ajax():
 
-            print(request.POST.get)
-            liked  = ObjectLikeFunc(request, pk, Post)
-            ctx = {'liked': liked, "content_id":pk}
+
+            liked, total_likes = ObjectLikeFunc(request, pk, Post)
+            print(total_likes)
+
+            ctx = {'liked': liked, "content_id":pk, 'likes_count':total_likes}
 
             return HttpResponse(json.dumps(ctx), content_type='application/json')
 

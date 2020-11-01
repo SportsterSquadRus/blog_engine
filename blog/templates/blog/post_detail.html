@@ -44,12 +44,26 @@
             <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
             {% endif %}        
           </form> -->
-          {% likeOrNotTag post request.user as postlikeOrNotTag %}
-          {% if postlikeOrNotTag %}
-          <a name="{{ post.id }}" style="font-size:48px;color: blue;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+          
+          {% if request.user.is_authenticated %}
+              {% if  post.author != request.user and level > 1 %}
+                  {% likeOrNotTag post request.user as postlikeOrNotTag %}
+                  {% if postlikeOrNotTag %}
+                      <a title="Всего лайков: {{ post.total_likes }}" name="{{ post.id }}" style="font-size:25px;color: blue;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                      {% else %}
+                      <a title="Всего лайков: {{ post.total_likes }}" name="{{ post.id }}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                  {% endif %}
+
+              {% endif %}
           {% else %}
-          <a name="{{ post.id }}" style="font-size:48px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+          <a href="{% url 'account_signup' %}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
           {% endif %}
+
+
+          {% if request.user == post.author %}        
+              <a title="Всего лайков: {{ post.total_likes }}" href="{{ post.get_update_url }}" class="btn btn-outline-primary">Редактировать</a>
+              <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
+          {% endif %}  
 <!-- -------------------------------------------------------- -->
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
           <script>
@@ -64,9 +78,11 @@
                         selector = document.getElementsByName(response.content_id);
                               if(response.liked==true){
                                 $(selector).css("color","blue");
+                                $(selector).attr('title', 'Всего лайков: ' + response.likes_count);
                               }
                               else if(response.liked==false){
                                 $(selector).css("color","black");
+                                $(selector).attr('title', 'Всего лайков: ' + response.likes_count);
                               }
           
           
