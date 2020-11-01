@@ -8,7 +8,6 @@ from .utils import ObjectLikeFunc
 
 @login_required
 def PostLikeView(request, pk):
-    print(pk)
     ObjectLikeFunc(request, pk, Post)
     return redirect(reverse('post_detail_url', args=[str(pk)]))
 
