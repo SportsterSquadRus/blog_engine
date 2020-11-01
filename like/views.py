@@ -4,10 +4,21 @@ from django.contrib.auth.decorators import login_required
 from comment.models import Comment
 from blog.models import Post
 from .utils import ObjectLikeFunc
+from django.http import HttpResponse
+import json
 
 
 @login_required
 def PostLikeView(request, pk):
+    if request.method == 'POST':
+        if request.POST.get("operation") == "like_submit" and request.is_ajax():
+
+            print(request.POST.get)
+            liked  = ObjectLikeFunc(request, pk, Post)
+            ctx = {'liked': liked, "content_id":pk}
+
+            return HttpResponse(json.dumps(ctx), content_type='application/json')
+
     ObjectLikeFunc(request, pk, Post)
     return redirect(reverse('post_detail_url', args=[str(pk)]))
 
