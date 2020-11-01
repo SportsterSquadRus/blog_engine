@@ -34,12 +34,12 @@ class DraftsListView(ListView):
 class PostDetailView(View):
 
     def get(self, request, pk):
-
-        user_profile, created = Profile.objects.get_or_create(user=request.user)
-
         post = get_object_or_404(Post, pk=pk)
         context = dict()
-        context['level'] = user_profile.rating(request.user)[4]
+        if request.user.is_authenticated:
+            user_profile, created = Profile.objects.get_or_create(user=request.user)
+            context['level'] = user_profile.rating(request.user)[4]
+
         context['post'] = post
         context['comment_form'] = CommentForm
         context['comments'] = post.comments.all()

@@ -45,6 +45,7 @@
           </form>
         </td>
               <td class="rightcol">
+                {% if  post.author != request.user and request.user.is_authenticated and level > 1 %}
                 {% complaintOrNotTag post request.user as postComplaintOrNotTag %}
                 {% if request.user != post.author and request.user.is_authenticated %}
                 
@@ -55,6 +56,7 @@
                     
                   {% endif %} 
                 {% endif %} 
+                {% endif %}
               </td>
         </tr>
         </table>
