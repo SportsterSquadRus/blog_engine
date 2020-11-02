@@ -13,7 +13,6 @@ import json
 def PostComplaintView(request, pk):
     if request.method == 'POST':
         if request.POST.get("operation") == "complaint_submit" and request.is_ajax():
-            print('ohoh')
             post, comp = ObjectComplaintFunc(request, pk, Post)
             if comp:
                 send_mail('Жалоба на пост от пользователя {}.'.format(request.user), 'http://127.0.0.1:8000{}'.format(
