@@ -12,13 +12,8 @@ import json
 def PostLikeView(request, pk):
     if request.method == 'POST':
         if request.POST.get("operation") == "like_submit" and request.is_ajax():
-
-
             liked, total_likes = ObjectLikeFunc(request, pk, Post)
-            print(total_likes)
-
             ctx = {'liked': liked, "content_id":pk, 'likes_count':total_likes}
-
             return HttpResponse(json.dumps(ctx), content_type='application/json')
 
     ObjectLikeFunc(request, pk, Post)
@@ -26,6 +21,12 @@ def PostLikeView(request, pk):
 
 @login_required
 def CommentLikeView(request, pk):
+    if request.method == 'POST':
+        if request.POST.get("operation") == "like_submit" and request.is_ajax():
+            liked, total_likes = ObjectLikeFunc(request, pk, Comment)
+            ctx = {'liked': liked, "content_id":pk, 'likes_count':total_likes}
+            return HttpResponse(json.dumps(ctx), content_type='application/json')
+
     ObjectLikeFunc(request, pk, Comment)
     comment = Comment.objects.get(pk=pk)
 
