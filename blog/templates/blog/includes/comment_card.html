@@ -9,7 +9,7 @@
     <table class="text">
       <tr>
       <td>
-      <form action="{% url 'like_comment' comment.pk %}" method="POST">
+      <!-- <form action="{% url 'like_comment' comment.pk %}" method="POST">
         {% csrf_token %}
 
         {% if  comment.author != request.user and request.user.is_authenticated %}
@@ -24,7 +24,23 @@
         {% else %}
           <div class="btn btn-outline-info">{{ comment.total_likes }}</div>
         {% endif %}
-      </form>
+      </form> -->
+
+      {% if request.user.is_authenticated %}
+          {% if  comment.author != request.user and level > 1 %}
+              {% likeOrNotTag comment request.user as commentlikeOrNotTag %}
+                {% if commentlikeOrNotTag %}
+                    <a id="{% url 'like_comment' comment.id %}" title="Всего лайков: {{ comment.total_likes }}" name="{{ comment.id }}" style="font-size:25px;color: blue;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                {% else %}
+                    <a id="{% url 'like_comment' comment.id %}" title="Всего лайков: {{ comment.total_likes }}" name="{{ comment.id }}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                {% endif %}
+
+            {% endif %}
+      {% else %}
+        <a href="{% url 'account_signup' %}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+      {% endif %}
+
+
     </td>
     <td class="rightcol">
 
