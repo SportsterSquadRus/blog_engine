@@ -43,15 +43,18 @@
 
     </td>
     <td class="rightcol">
+      
       {% if  request.user != comment.author and request.user.is_authenticated and level > 1 %}
             {% complaintOrNotTag comment request.user as commentComplaintOrNotTag %}
+
+
+            {% if commentComplaintOrNotTag %}
+                <a href="#" class="complaint btn btn-link" name="{{ comment.id }}" id="{% url 'complaint_comment' comment.pk %}" >Пожаловаться</a>
+            {% else %}
+               <a class="btn btn-link disabled">Пожаловаться</a>                             
+            {% endif %} 
             
-              {% if commentComplaintOrNotTag %}
-                <a href="{% url 'complaint_comment' comment.pk %}" >Пожаловаться</a>
-              {% else %}
-                Жалоба отправлена  
-                
-              {% endif %} 
+
 
       {% endif %} 
 
