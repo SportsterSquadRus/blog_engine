@@ -49,9 +49,9 @@
               {% if  post.author != request.user and level > 1 %}
                   {% likeOrNotTag post request.user as postlikeOrNotTag %}
                   {% if postlikeOrNotTag %}
-                      <a id="{% url 'like_post' post.id %}" title="Всего лайков: {{ post.total_likes }}" name="{{ post.id }}" style="font-size:25px;color: blue;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                      <a href="#" id="{% url 'like_post' post.id %}" title="Всего лайков: {{ post.total_likes }}" name="{{ post.id }}" style="font-size:25px;color: blue;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
                       {% else %}
-                      <a id="{% url 'like_post' post.id %}" title="Всего лайков: {{ post.total_likes }}" name="{{ post.id }}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                      <a href="#" id="{% url 'like_post' post.id %}" title="Всего лайков: {{ post.total_likes }}" name="{{ post.id }}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
                   {% endif %}
 
               {% endif %}
@@ -73,9 +73,9 @@
                     {% complaintOrNotTag post request.user as postComplaintOrNotTag %}
                         
                           {% if postComplaintOrNotTag %}
-                            <a class="complaint" name="{{ post.id }}" id="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
+                            <a href="#" class="complaint btn btn-link" name="{{ post.id }}" id="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
                           {% else %}
-                            Жалоба отправлена                              
+                            <a class="btn btn-link disabled">Пожаловаться</a>                             
                           {% endif %} 
 
                 {% endif %}

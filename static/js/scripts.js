@@ -53,7 +53,7 @@ $(document).ready(function(){
               success: function(response) {
               selector = document.getElementsByName(response.content_id);
                     if(response.complaint==true){
-                      $(selector).css("color","blue");
+                      $(selector).addClass("disabled");
                     }
                     else if(response.complaint==false){
                       $(selector).css("color","black");
