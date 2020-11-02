@@ -31,6 +31,21 @@ def PostComplaintView(request, pk):
 
 @login_required
 def CommentComplaintView(request, pk):
+    if request.method == 'POST':
+        if request.POST.get("operation") == "complaint_submit" and request.is_ajax():
+            print('ohoho')
+            comment, comp = ObjectComplaintFunc(request, pk, Comment)
+            if comp:
+                post = Post.objects.get(id=comment.object_id)
+
+                send_mail('Жалоба на комментарий от пользователя {}.'.format(request.user), 'Комментарий к посту http://127.0.0.1:8000{}. Текст комментария: {}'.format(
+                    post.get_absolute_url(), comment.body), passwords.email_pass()[0], [passwords.admin()], fail_silently=False,)
+                    
+                ctx = {'complaint': comp, "content_id":pk}
+
+                return HttpResponse(json.dumps(ctx), content_type='application/json')
+                
+    
     comment, comp = ObjectComplaintFunc(request, pk, Comment)
     if comp:
         post = Post.objects.get(id=comment.object_id)
