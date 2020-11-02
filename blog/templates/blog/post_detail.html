@@ -56,7 +56,7 @@
 
               {% endif %}
           {% else %}
-          <a href="{% url 'account_signup' %}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+          <a href="{% url 'account_login' %}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
           {% endif %}
 
 
@@ -70,16 +70,14 @@
         </td>
               <td class="rightcol">
                 {% if  post.author != request.user and request.user.is_authenticated and level > 1 %}
-                {% complaintOrNotTag post request.user as postComplaintOrNotTag %}
-                {% if request.user != post.author and request.user.is_authenticated %}
-                
-                  {% if postComplaintOrNotTag %}
-                    <a href="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
-                  {% else %}
-                    Жалоба отправлена  
-                    
-                  {% endif %} 
-                {% endif %} 
+                    {% complaintOrNotTag post request.user as postComplaintOrNotTag %}
+                        
+                          {% if postComplaintOrNotTag %}
+                            <a href="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
+                          {% else %}
+                            Жалоба отправлена                              
+                          {% endif %} 
+
                 {% endif %}
               </td>
         </tr>
