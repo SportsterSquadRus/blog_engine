@@ -41,3 +41,29 @@ $(document).ready(function(){
   });
 
 });
+
+
+$(document).ready(function(){
+  $('.complaint').click(function(){
+    $.ajax({
+              type: "POST",
+              url: $(this).attr('id'),
+              data: {'content_id': $(this).attr('name'),'operation':'complaint_submit','csrfmiddlewaretoken': getCookie('csrftoken')},
+              dataType: "json",
+              success: function(response) {
+              selector = document.getElementsByName(response.content_id);
+                    if(response.complaint==true){
+                      $(selector).css("color","blue");
+                    }
+                    else if(response.complaint==false){
+                      $(selector).css("color","black");
+                    }
+  
+  
+              }
+  
+        });
+  
+  });
+
+});

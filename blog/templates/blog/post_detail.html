@@ -73,7 +73,7 @@
                     {% complaintOrNotTag post request.user as postComplaintOrNotTag %}
                         
                           {% if postComplaintOrNotTag %}
-                            <a href="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
+                            <a class="complaint" name="{{ post.id }}" id="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
                           {% else %}
                             Жалоба отправлена                              
                           {% endif %} 
@@ -112,6 +112,6 @@
 
 
 {% block scripts %}
-<script src="{% static 'js/post_like.js' %}"></script>  
+<script src="{% static 'js/scripts.js' %}"></script>  
 {% endblock scripts %}
   
