@@ -9,6 +9,7 @@
 {% load static %}
 {% load extras %}
 <link rel="stylesheet" href="{% static 'css/table.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="card mb-4" style="width: 70rem;">
   <div class="card-header">{{ post.date_pub }}</div>
@@ -23,7 +24,7 @@
       <table class="text">
         <tr>
         <td>
-          <form action="{% url 'like_post' post.pk %}" method="POST">
+          <!-- <form action="{% url 'like_post' post.pk %}" method="POST">
             {% csrf_token %}
           
             {% if  post.author != request.user and request.user.is_authenticated and level > 1 %}
@@ -42,20 +43,41 @@
             <a href="{{ post.get_update_url }}" class="btn btn-outline-primary">Редактировать</a>
             <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
             {% endif %}        
-          </form>
+          </form> -->
+          
+          {% if request.user.is_authenticated %}
+              {% if  post.author != request.user and level > 1 %}
+                  {% likeOrNotTag post request.user as postlikeOrNotTag %}
+                  {% if postlikeOrNotTag %}
+                      <a id="{% url 'like_post' post.id %}" title="Всего лайков: {{ post.total_likes }}" name="{{ post.id }}" style="font-size:25px;color: blue;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                      {% else %}
+                      <a id="{% url 'like_post' post.id %}" title="Всего лайков: {{ post.total_likes }}" name="{{ post.id }}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                  {% endif %}
+
+              {% endif %}
+          {% else %}
+          <a href="{% url 'account_login' %}" style="font-size:25px;color: black;" class="likin" id="co"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+          {% endif %}
+
+
+          {% if request.user == post.author %}        
+              <a title="Всего лайков: {{ post.total_likes }}" href="{{ post.get_update_url }}" class="btn btn-outline-primary">Редактировать</a>
+              <a href="{{ post.get_delete_url }}" class="btn btn-outline-danger">Удалить</a>
+          {% endif %}  
+
+
+
         </td>
               <td class="rightcol">
                 {% if  post.author != request.user and request.user.is_authenticated and level > 1 %}
-                {% complaintOrNotTag post request.user as postComplaintOrNotTag %}
-                {% if request.user != post.author and request.user.is_authenticated %}
-                
-                  {% if postComplaintOrNotTag %}
-                    <a href="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
-                  {% else %}
-                    Жалоба отправлена  
-                    
-                  {% endif %} 
-                {% endif %} 
+                    {% complaintOrNotTag post request.user as postComplaintOrNotTag %}
+                        
+                          {% if postComplaintOrNotTag %}
+                            <a href="{% url 'complaint_post' post.pk %}" >Пожаловаться</a>
+                          {% else %}
+                            Жалоба отправлена                              
+                          {% endif %} 
+
                 {% endif %}
               </td>
         </tr>
@@ -87,3 +109,9 @@
     {% endif %}
   </div> 
 {% endblock content %}
+
+
+{% block scripts %}
+<script src="{% static 'js/post_like.js' %}"></script>  
+{% endblock scripts %}
+  
