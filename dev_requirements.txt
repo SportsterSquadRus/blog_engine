@@ -1,4 +1,6 @@
+autopep8
+pylint
+pylint-django
 django
 django-allauth
 django-ckeditor
-psycopg2-binary
